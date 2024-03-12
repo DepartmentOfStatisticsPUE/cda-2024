@@ -1,0 +1,457 @@
+---
+title: "Goodness of fit statistics"
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+---
+
+```{r setup, echo = FALSE}
+JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+knitr::opts_chunk$set(engine.path = list(
+  python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
+  julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/"
+))
+```
+
+## Setup
+
+::: panel-tabset
+## R
+
+Install `vcd` and `fitdistrplus` packages.
+
+```{r, eval = FALSE}
+install.packages(c("vcd", "fitdistrplus"))
+```
+
+```{r}
+library(vcd)
+library(fitdistrplus)
+```
+
+## Python
+
+Load modules
+
+```{python}
+import scipy.stats as st
+from scipy.optimize import minimize
+import numpy as np
+import pandas as pd
+```
+
+## Julia
+
+Install modules
+
+```{julia, eval = F}
+using Pkg
+Pkg.add(["HypothesisTests", "StatsBase"])
+```
+
+Load packages
+
+```{julia}
+using Distributions
+using Random
+using HypothesisTests
+using Optim
+using StatsBase
+using DelimitedFiles
+using DataFrames
+```
+:::
+
+
+
+## Exercise for the lecture
+
+::: panel-tabset
+
+## R
+
+```{r}
+set.seed(1)
+n <- 10000
+x <- rnbinom(n, mu = 3, size = 2)
+## or
+x <- rnbinom(n, prob = 2/(2+3), size = 2)
+x_length <- length(table(x))
+x_dof <- 1+2
+x_fitted <- fitdistr(x = x, densfun = "negative binomial") ## using MASS::fitdistr
+x_fitted
+```
+
+The same using `fitdistrplus` package
+
+```{r}
+fitdist(x, "nbinom")
+```
+`fitdistrplus` package have PDF and CDF plots for assessing the fit.
+
+```{r}
+fitdist(x, "nbinom") |> plot()
+```
+
+save data for other languages
+
+
+```{r}
+cat(x, sep = "\n", file = "nb_sim.txt")
+```
+
+Small note regarding the `vcd` package. It gives correct answers but in a slightly different way.
+
+1. `goodfit` function returns a list with `fitted` (expected) frequencies under a given distribution using `pdf` of this distribution
+2. `summary(goodfit object)` returns a $\chi^2$ and $G^2$ tests using `cdf` of a given distribution. 3. Pearson residuals are calculated as 
+
+$$
+\widehat{\text{resid}}_{k,\text{Pearson}} = \frac{n_k - \hat{n}_k}{\sqrt{\hat{n}_k}}
+$$
+
+Thus, if we use `object$fitted` created by `goodfit` to calculate $\chi^2$ and $G^2$ statistics by hand we will get slightly different statistics values than the one returned by `summary.goodfit()` function. Thus, both are accepted results. 
+
+In this material, we use the first approach in Python and Julia.
+
+```{r}
+gof_nb <- goodfit(x, "nbinomial")
+gof_po <- goodfit(x, "poisson")
+gof_nb
+```
+
+```{r}
+summary(gof_nb)
+summary(gof_po)
+```
+```{r}
+rootogram(gof_nb, main = "Negative binomial")
+rootogram(gof_po, main = "Poisson")
+```
+
+## Python
+
+Python uses a different specification of negative binomial than we specified in R so we need to rewrite it as follows: 
+
+$$
+p = \frac{\text{size}}{\text{size} + \mu}.
+$$
+
+```{python}
+np.random.seed(1)
+N = 1000
+x = st.nbinom(n = 2, p = 2/(2+3)).rvs(N)
+np.mean(x)
+```
+
+However, these pseudo-random numbers are not the same as in R. So, to make our example comparable with R, we read data generated from R that was saved to text file.
+
+```{python}
+x = np.loadtxt("nb_sim.txt", dtype = np.int64)
+np.mean(x)
+```
+
+Optimization using pmf function
+
+```{python}
+def pdf_nbinom(par, x):
+  pdfnbinom = st.nbinom(par[0],par[1]).logpmf(x)
+  return -np.sum(pdfnbinom)
+
+res = minimize(fun=pdf_nbinom, x0=[2, 0.5], args = (x), method = "Nelder-Mead")
+res
+res.x
+```
+
+**Goodness of fit -- step by step**
+
+$G^2$ and $\chi^2$ GoF can be calculated using `scipy.stats.power_divergence` function
+
+```{python}
+x_uniq_vals, x_uniq_counts = np.unique(x, return_counts=True)
+## we simply use pdf(NB(2.01357331, 0.40157875), x) 
+est_pdf = st.nbinom(res.x[0],res.x[1]).pmf(x_uniq_vals) 
+est_pdf = est_pdf/np.sum(est_pdf)
+np.round(est_pdf*100,)
+```
+
+$G^2$ test
+
+```{python}
+st.power_divergence(x_uniq_counts, 
+                    sum(x_uniq_counts)*est_pdf, 
+                    lambda_ = 0, ddof = 2)
+```
+
+$\chi^2$ test
+
+```{python}
+st.power_divergence(x_uniq_counts, 
+                    sum(x_uniq_counts)*est_pdf, 
+                    lambda_ = 1, ddof = 2)
+```
+
+
+**Rootograms** are not available in python. There are some scripts that recreate this plot using `matplotlib`, see https://stackoverflow.com/questions/38252879/how-to-plot-a-hanging-rootogram-in-python
+
+
+
+## Julia
+
+```{julia}
+Random.seed!(123);
+n = 1000;
+x = rand(NegativeBinomial(2, 2/(2+3)), n);
+mean(x)
+```
+
+However, these pseudo-random numbers are not the same as in R. So, to make our example comparable with R, we read data generated from R that was saved to text file.
+
+```{julia}
+x = readdlm("nb_sim.txt", Int);
+x = vec(x);
+mean(x)
+```
+
+```{julia}
+function llnb(par, data)
+  ll = logpdf.(NegativeBinomial(par[1], par[2]), data)
+  return -sum(ll)
+end
+
+res = optimize(par -> llnb(par, x), [2, 0.5])
+res.minimizer
+```
+
+
+Goodness of fit statistics
+
+```{julia}
+x_uniq_dict = sort(countmap(x));
+x_uniq_vals = Int.(keys(x_uniq_dict));
+x_uniq_counts = Int.(values(x_uniq_dict));
+x_params = res.minimizer;
+est_pdf = pdf.(NegativeBinomial(x_params[1], x_params[2]), x_uniq_vals);
+est_pdf = est_pdf ./ sum(est_pdf);
+```
+
+$G^2$ test
+
+```{julia, eval = F}
+PowerDivergenceTest(x_uniq_counts, lambda = 0.0, theta0 = est_pdf) 
+```
+
+```julia
+Multinomial Likelihood Ratio Test
+---------------------------------
+Population details:
+    parameter of interest:   Multinomial Probabilities
+    value under h_0:         [0.162756, 0.192213, 0.171812, 0.137132, 0.102889, 0.074243, 0.0521512, 0.03592, 0.0243722, 0.0163424, 0.0108539, 0.00715202, 0.0046816, 0.00304727, 0.00197386, 0.00127317, 0.000818163, 0.000334669, 3.4335e-5]
+    point estimate:          [0.16, 0.195, 0.17, 0.137, 0.114, 0.068, 0.052, 0.033, 0.019, 0.02, 0.006, 0.014, 0.005, 0.002, 0.001, 0.001, 0.001, 0.001, 0.001]
+    95% confidence interval: [(0.131, 0.1891), (0.166, 0.2241), (0.141, 0.1991), (0.108, 0.1661), (0.085, 0.1431), (0.039, 0.09709), (0.023, 0.08109), (0.004, 0.06209), (0.0, 0.04809), (0.0, 0.04909), (0.0, 0.03509), (0.0, 0.04309), (0.0, 0.03409), (0.0, 0.03109), (0.0, 0.03009), (0.0, 0.03009), (0.0, 0.03009), (0.0, 0.03009), (0.0, 0.03009)]
+
+Test summary:
+    outcome with 95% confidence: fail to reject h_0
+    one-sided p-value:           0.4174
+
+Details:
+    Sample size:        1000
+    statistic:          18.591632916708782
+    degrees of freedom: 18
+    residuals:          [-0.216012, 0.200997, -0.138238, -0.0112519, 1.09536, -0.724547, -0.0209416, -0.487213, -1.08818, 0.904765, -1.47332, 2.56064, 0.147156, -0.599932, -0.693168, -0.242094, 0.201031, 1.15008, 5.21144]
+    std. residuals:     [-0.236076, 0.223635, -0.151902, -0.0121131, 1.15647, -0.75304, -0.02151, -0.496206, -1.10169, 0.91225, -1.48139, 2.56985, 0.147502, -0.600848, -0.693853, -0.242248, 0.201113, 1.15028, 5.21153]
+
+```
+
+Correct p-value for the correct number of dof.
+
+```{julia}
+1-cdf(Chisq(19), 18.591632916708782)
+```
+
+$\chi^2$ test
+
+```{julia, eval = F}
+PowerDivergenceTest(x_uniq_counts, lambda = 1.0, theta0 = est_pdf)
+```
+
+```julia
+Pearson's Chi-square Test
+-------------------------
+Population details:
+    parameter of interest:   Multinomial Probabilities
+    value under h_0:         [0.162756, 0.192213, 0.171812, 0.137132, 0.102889, 0.074243, 0.0521512, 0.03592, 0.0243722, 0.0163424, 0.0108539, 0.00715202, 0.0046816, 0.00304727, 0.00197386, 0.00127317, 0.000818163, 0.000334669, 3.4335e-5]
+    point estimate:          [0.16, 0.195, 0.17, 0.137, 0.114, 0.068, 0.052, 0.033, 0.019, 0.02, 0.006, 0.014, 0.005, 0.002, 0.001, 0.001, 0.001, 0.001, 0.001]
+    95% confidence interval: [(0.131, 0.1891), (0.166, 0.2241), (0.141, 0.1991), (0.108, 0.1661), (0.085, 0.1431), (0.039, 0.09709), (0.023, 0.08109), (0.004, 0.06209), (0.0, 0.04809), (0.0, 0.04909), (0.0, 0.03509), (0.0, 0.04309), (0.0, 0.03409), (0.0, 0.03109), (0.0, 0.03009), (0.0, 0.03009), (0.0, 0.03009), (0.0, 0.03009), (0.0, 0.03009)]
+
+Test summary:
+    outcome with 95% confidence: reject h_0
+    one-sided p-value:           0.0010
+
+Details:
+    Sample size:        1000
+    statistic:          42.242072813765624
+    degrees of freedom: 18
+    residuals:          [-0.216012, 0.200997, -0.138238, -0.0112519, 1.09536, -0.724547, -0.0209416, -0.487213, -1.08818, 0.904765, -1.47332, 2.56064, 0.147156, -0.599932, -0.693168, -0.242094, 0.201031, 1.15008, 5.21144]
+    std. residuals:     [-0.236076, 0.223635, -0.151902, -0.0121131, 1.15647, -0.75304, -0.02151, -0.496206, -1.10169, 0.91225, -1.48139, 2.56985, 0.147502, -0.600848, -0.693853, -0.242248, 0.201113, 1.15028, 5.21153]
+```
+
+Note that p-value is calculated wrongly as correct df is 18 not 20. So correct p-value is: 
+
+```{julia}
+1-cdf(Chisq(19), 42.242072813765624)
+```
+
+:::
+
+
+## Example from the lecture
+
+::: panel-tabset
+
+## R
+
+Vector with data from the lecture
+
+```{r}
+X <- rep(0:4, c(100,50,15,5,1))
+X_tab <- table(X)
+X_tab
+```
+
+Check if Poisson distribution fits the data 
+
+```{r}
+X_po <- goodfit(X, "poisson")
+X_po
+```
+Step by step:
+
+1. estimate $\lambda$.
+
+```{r}
+lambda_hat <- mean(X)
+lambda_hat
+```
+
+2. get expected values
+
+```{r}
+n_hat <- length(X)*dpois(0:4, lambda_hat)
+n_hat
+```
+
+3. get pearson residual
+
+```{r}
+r_hat <- (as.vector(X_tab)-n_hat)/sqrt(n_hat)
+r_hat
+```
+
+4. Save the result into a table
+
+```{r}
+X_dt <- data.frame(X = 0:4, n = as.vector(X_tab), n_hat = n_hat, r_hat = r_hat)
+X_dt
+```
+Check if negative binomial distribution fits the data better.
+
+```{r}
+X_nb <- goodfit(X, "nbinom")
+X_nb
+```
+Let's now look at $G^2$ test. Results indicate that Poisson and negative binomial distribution fit the data equally well.
+
+```{r}
+summary(X_po)
+summary(X_nb)
+```
+
+Now, let's see what AIC, BIC and LR test will say.
+
+
+```{r}
+X_fit_ll_po <- fitdistr(X, "poisson")
+X_fit_ll_nb <- fitdistr(X, "negative binomial")
+```
+
+The lower the better -- Poisson seems to be a better distribution
+
+```{r}
+AIC(X_fit_ll_po, X_fit_ll_nb)
+```
+
+The lower the better -- Poisson seems to be a better distribution. Note that in this case the difference is higher due to larger number of parameters for NB, so BIC suggest distribution with lower number of parameters.
+
+```{r}
+BIC(X_fit_ll_po, X_fit_ll_nb)
+```
+Now, let's see what LR test will tell. For this example it seems that two distributions equally well fit the data.
+
+```{r}
+LR_test <- 2*X_fit_ll_nb$loglik - 2*X_fit_ll_po$loglik
+LR_test_p <- pchisq(LR_test, 1, lower.tail = F)
+data.frame(LR=LR_test, df = 1, p_val = LR_test_p)
+```
+**Conclusion**: based only on the data we cannot indicate which distribution fit the data better. 
+
+## Python
+
+Code in Python that reproduce R results.
+
+```{python}
+## generate data
+X = np.concatenate([np.repeat(i, n) for i, n in enumerate([100, 50, 15, 5, 1])])
+## frequency table
+X_tab = pd.Series(X).value_counts()
+## estimated lambda
+lambda_hat = np.mean(X)
+## fitted counts
+n_hat = len(X) * st.poisson.pmf(np.arange(0, 5), lambda_hat)
+## pearson residual
+r_hat = (X_tab.values - n_hat) / np.sqrt(n_hat)
+## store results in data.frame
+X_dt = pd.DataFrame({'X': np.arange(0, 5), 'n': X_tab.values, 'n_hat': n_hat, 'r_hat': r_hat})
+X_dt
+```
+```{python}
+## loglik for n
+def pdf_nbinom(par, x):
+  pdfnbinom = st.nbinom(par[0],par[1]).logpmf(x)
+  return -np.sum(pdfnbinom)
+
+res_nb = minimize(fun=pdf_nbinom, x0=[2, 0.5], args = (X), method = "Nelder-Mead")
+ll_po = sum(st.poisson(np.mean(X)).logpmf(X))
+ll_nb = -res_nb.fun
+LR_test =  2*ll_nb - 2*ll_po
+[LR_test, 1, 1 - st.chi2.cdf(LR_test, 1)]
+```
+
+```{python}
+AIC_po = 2*1 - 2*ll_po
+AIC_nb = 2*2 - 2*ll_nb
+[AIC_nb, AIC_po]
+BIC_po = np.log(len(X))*1 - 2*ll_po
+BIC_nb = np.log(len(X))*2 - 2*ll_nb
+[BIC_nb, BIC_po]
+```
+
+## Julia
+
+```{julia}
+X = vcat([fill(i-1,n) for (i, n) in enumerate([100,50,15,5,1])]...);
+X_tab = sort(countmap(X));
+lambda_hat = mean(X);
+n_hat = length(X) * pdf.(Poisson(lambda_hat), 0:4);
+r_hat = (values(X_tab) .- n_hat) ./ sqrt.(n_hat);
+X_dt = DataFrame(X = 0:4, n = values(X_tab).*1, n_hat = n_hat, r_hat = r_hat)
+```
+
+
+:::

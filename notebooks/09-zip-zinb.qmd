@@ -1,0 +1,261 @@
+---
+title: "Generalized linear regression: ZIP and ZINB"
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+    df-print: kable
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+---
+
+```{r setup, echo = FALSE}
+#JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+knitr::opts_chunk$set(engine.path = list(
+  python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
+  julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/julia"
+))
+```
+
+# Setup
+
+::: panel-tabset
+## R
+
+```{r, eval = F}
+install.packages("pscl")
+install.packages("countreg", repos="http://R-Forge.R-project.org")
+```
+
+```{r}
+library(MASS) ## glm.nb
+library(countreg)
+library(pscl)
+library(modelsummary)
+library(boot)
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{r}
+df <- read.csv("../data/polish-jvs.csv", colClasses = c("character", "factor", rep("character", 4), "numeric"))
+head(df)
+```
+
+## Python
+
+Load modules
+
+```{bash, eval = F}
+!pip install statsmodels 
+```
+
+```{python}
+from patsy import dmatrices
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{python}
+df = pd.read_csv("../data/polish-jvs.csv", dtype={"id": np.int64, "woj":str, "public":str,"size": str, "nace_division": str, "nace": str})
+df.head()
+```
+
+## Julia
+
+```{julia, eval = F}
+using Pkg
+Pkg.add(["Effects", "StatsBase", "CSV", "CategoricalArrays", "GLM"])
+```
+
+Load packages
+
+```{julia, eval = F}
+using Effects
+using StatsBase
+using CSV
+using CategoricalArrays
+using GLM
+using Statistics
+using DataFrames
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{julia, eval = F}
+df=CSV.read("../data/polish-jvs.csv", DataFrame, 
+            types = Dict(:id => Int64, :woj=> String, :public=> String, 
+                         :size => String, :nace_division => String, :nace => String));
+first(df, 5)
+```
+
+:::
+
+
+# Zero-inflated Poisson (ZIP)
+
+::: panel-tabset
+## R
+
+```{r}
+m1 <- pscl::zeroinfl(formula = vacancies ~ size + public,
+                     dist = "poisson",
+                     link = "logit",
+                     data = df)
+```
+
+```{r}
+summary(m1)
+```
+
+```{r}
+rootogram(m1)
+```
+
+## Python
+
+```{python}
+y, x = dmatrices("vacancies ~ size + public", df, return_type='dataframe')
+```
+
+```{python}
+m1 = sm.ZeroInflatedPoisson(endog=y, exog=x, exog_infl=x, inflation='logit').fit(maxiter = 100)
+print(m1.summary())
+```
+
+## Julia
+
+:::
+
+
+# Zero-inflated Negative Binomial (ZINB)
+
+::: panel-tabset
+## R
+
+```{r}
+m2 <- pscl::zeroinfl(formula = vacancies ~ size + public,
+                     dist = "negbin",
+                     link = "logit",
+                     data = df)
+```
+
+```{r}
+summary(m2)
+```
+
+```{r}
+rootogram(m2)
+```
+
+```{r}
+BIC(m1, m2)
+```
+
+## Python
+
+```{python}
+m2 = sm.ZeroInflatedNegativeBinomialP(endog=y, exog=x, exog_infl=x, inflation='logit').fit(maxiter = 500)
+print(m2.summary())
+```
+## Julia
+
+:::
+
+
+# Simulations
+
+::: panel-tabset
+## R
+
+```{r}
+# Set a seed for reproducibility
+set.seed(123)
+
+# Define the parameters
+n <- 10000  # number of observations
+p_zero <- 0.5  # proportion of extra zeros
+lambda <- 2  # Poisson parameter
+X <- runif(n, -1, 1)  # predictor variable
+W <- runif(n, -1, 1)  # predictor variable for zero-inflation
+b <- 0.5  # regression coefficient
+g <- -0.5  # regression coefficient for zero-inflation
+
+# Generate binary indicators for the zero process
+zero_process <- rbinom(n, 1, 1 / (1 + exp(-W * g)))
+
+# Generate counts for the non-zero process
+poisson_process <- rpois(n, exp(X * b))
+
+# Generate the zero-inflated data
+Y <- zero_process * 0 + (1 - zero_process) * poisson_process
+```
+
+```{r}
+barplot(table(Y))
+```
+
+```{r}
+# Create a data frame
+data <- data.frame(Y = Y, X = X, W = W)
+
+# Fit a zero-inflated Poisson model
+model <- zeroinfl(Y ~ X | W, data = data, dist = "poisson")
+
+# Print the summary
+summary(model)
+
+```
+
+## Python
+
+```{python}
+# Import the required libraries
+import numpy as np
+import statsmodels.api as sm
+
+# Set a seed for reproducibility
+np.random.seed(123)
+
+# Define the parameters
+n = 10000  # number of observations
+p_zero = 0.5  # proportion of extra zeros
+lambda_ = 2  # Poisson parameter
+X = np.random.uniform(-1, 1, n)  # predictor variable
+W = np.random.uniform(-1, 1, n)  # predictor variable for zero-inflation
+b = 0.5  # regression coefficient
+g = -0.5  # regression coefficient for zero-inflation
+
+# Generate binary indicators for the zero process
+zero_process = np.random.binomial(1, 1 / (1 + np.exp(-W * g)), n)
+
+# Generate counts for the non-zero process
+poisson_process = np.random.poisson(lambda_, n)
+
+# Generate the zero-inflated data
+Y = zero_process * 0 + (1 - zero_process) * poisson_process
+
+# Add intercepts to the predictor variables
+X_intercept = sm.add_constant(X)
+W_intercept = sm.add_constant(W)
+
+# Fit a zero-inflated Poisson model
+model = sm.ZeroInflatedPoisson(endog=Y, exog=X_intercept, exog_infl=W_intercept).fit()
+
+# Print the summary
+print(model.summary())
+
+```
+
+## Julia
+:::
+
+

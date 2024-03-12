@@ -1,0 +1,309 @@
+---
+title: "Discrete distributions "
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+---
+
+```{r setup, echo = FALSE}
+JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+knitr::opts_chunk$set(engine.path = list(
+  python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
+  julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/"
+))
+```
+
+## Setup
+
+::: panel-tabset
+## R
+
+There is no need to install or load packages. All functionalities are
+build in. One may consider installing `maxLik` package or `rootSolve`
+
+```{r, eval = FALSE}
+install.packages(c("maxLik", "rootSolve"))
+```
+
+```{r}
+library(maxLik)
+library(rootSolve)
+```
+
+## Python
+
+Load modules
+
+```{python}
+import scipy.stats as st
+import numpy as np
+import pandas as pd
+from scipy.optimize import minimize
+from scipy.optimize import fsolve ## finding root(s) of a function -- for scalar parameter
+```
+
+## Julia
+
+Install modules
+
+```{julia, eval = F}
+using Pkg
+Pkg.add(["Optim", "Roots"])
+```
+
+Load packages
+
+```{julia}
+using Distributions
+using DataFrames
+using Random
+using Optim
+using Roots
+```
+:::
+
+
+## Exercise -- zero-truncated Poisson distribution
+
+We start with likelihood function
+
+$$
+    L = \prod_i \frac{\lambda^x_i}{(e^\lambda-1)x_i!},
+$$
+
+then we compute log-likelihood
+
+$$
+   \log L = \sum_i x_i \log \lambda - \sum_i \log(e^\lambda-1) - \sum_i \log(x_i!) 
+$$
+
+In order to get estimate of $\lambda$ we need to calculate derivatives with respect to this parameter. Thus, gradient is given by 
+
+$$
+    \frac{\partial \log L}{\partial \lambda} = \frac{\sum_i x_i}{\lambda} - \frac{n e^\lambda}{e^\lambda - 1} = 
+    \frac{\sum_i x_i}{\lambda} - n \frac{e^\lambda}{e^\lambda - 1}.    
+$$
+
+We can also calculate second derivative (hessian)
+
+$$
+    \frac{\partial^2 \log L}{\partial \lambda^2} =  - \frac{\sum_i x_i}{\lambda^2} + n \frac{e^\lambda}{(e^\lambda-1)^2}.
+$$
+
+
+::: panel-tabset
+
+## R
+
+### Functions and data
+
+Functions
+```{r}
+ll <- function(par, x) {
+  m <- sum(x)*log(par)-length(x)*log(exp(par)-1)
+  m
+}
+
+ll_min <- function(par, x) {
+  m <- sum(x)*log(par)-length(x)*log(exp(par)-1)
+  -m
+}
+
+## gradient
+grad <- function(par, x)  {
+  g <- sum(x) / par - length(x)*exp(par)/(exp(par)-1)
+  g
+}
+
+
+## hessian
+hess <- function(par, x) {
+  h <- -sum(x)/par^2 + length(x)*exp(par)/(exp(par)-1)^2 
+  h
+}
+
+## using pdf
+
+pdf_ztpois <- function(lambda, x) {
+    pdfztpoiss <- dpois(x, lambda)/(1-dpois(0, lambda))
+    return(-sum(log(pdfztpoiss)))
+}
+
+
+```
+
+Data 
+```{r}
+d <-  c(1645,183,37, 13,1,1)
+x <- rep(1:6,d)
+```
+
+### Solutions based on log-likelihood function
+
+Solution using `stats::optim` -- minimization by default
+
+```{r}
+optim(par = 1, fn = ll_min, x = x, method = "Brent", lower = 0, upper = 6, hessian = T)
+optim(par = 1, fn = ll_min, gr = grad, x = x, method = "Brent", lower = 0, upper = 6, hessian = T)
+optim(par = 1, fn = pdf_ztpois,  x = x, method = "Brent", lower = 0, upper = 6, hessian = T) 
+```
+
+Solution using `stats::optimize` -- maximization by defaul
+
+```{r}
+optimize(f = ll_min, lower = 0, upper = 6, x = x) ## minimization
+optimize(f = ll, lower = 0, upper = 6, x = x, maximum = T) ## maximization
+```
+Solution using `stats::nlm` -- minimization
+
+```{r}
+nlm(f = ll_min, p = 1, x = x, hessian = T)
+```
+Solution using `maxLik::maxLik` -- maximization by default
+
+```{r}
+maxLik(logLik = ll, start = 1,  x = x) |> summary()
+maxLik(logLik = ll, start = 1, grad = grad, hess = hess,  x = x) |> summary()
+```
+
+
+
+### Solutions based on gradient function
+
+Solutions using `stats::uniroot`
+
+```{r}
+uniroot(grad, lower = 0.1, upper = 0.9, x = x) 
+```
+
+Solutions using `rootSolve::multiroot`
+
+```{r}
+multiroot(grad, start = 0.1, x = x) 
+```
+
+## Python
+
+### Functions and data
+
+Functions
+
+```{python}
+def ll(par,x):
+  m = np.sum(x)*np.log(par)-len(x)*np.log(np.exp(par)-1)
+  return -m
+
+## gradient
+def grad(par,x):
+  g = np.sum(x) / par - len(x)*np.exp(par)/(np.exp(par)-1)
+  return -g
+
+## hessian
+def hess(par,x):
+  h = -np.sum(x)/par**2 + len(x)*np.exp(par)/(np.exp(par)-1)**2 
+  return h
+
+## pdf
+def pdf_ztpois(lam, x):
+  pdfztpoiss = st.poisson(lam).pmf(x) / (1 - st.poisson(lam).pmf(0))
+  return -np.sum(np.log(pdfztpoiss))
+```
+
+Data
+
+```{python}
+d = np.array([1645,183,37, 13,1,1])
+x = np.repeat(np.arange(1,7), d)
+```
+
+### Solutions
+
+```{python}
+res = minimize(fun=ll, x0=[0.5], method = "Newton-CG", jac = grad, hess = hess, args = (x))
+res
+```
+
+```{python}
+res = minimize(fun=pdf_ztpois, x0=[0.5], args = (x), method = "Nelder-Mead")
+res
+```
+
+```{python}
+res = fsolve(func = grad, x0 = 1, fprime = hess, args = (x,), full_output = True)
+res
+```
+
+```{python}
+np.sqrt(1/np.abs(hess(res[0], x)))
+```
+
+## Julia
+
+### Functions and data
+
+```{julia}
+## logL - minimization
+function ll(par, x)
+  par = par[1]
+  m = sum(x)*log(par)-length(x)*log(exp(par)-1)
+  return -m
+end
+
+
+## gradient
+function grad!(G,par,x) 
+  par = par[1]
+  G[1] = -(sum(x) / par - length(x)*exp(par)/(exp(par)-1))
+  return G
+end 
+
+## hessian
+function hess!(H,par, x)
+  par = par[1]
+  H[1] = -sum(x)/par^2 + length(x)*exp(par)/(exp(par)-1)^2 
+  return H
+end
+
+fun_opt = TwiceDifferentiable(par -> ll(par, x), 
+                              (G, par) -> grad!(G, par, x), 
+                              (H, par) -> hess!(H, par, x), 
+                              [0.5])
+
+function grad(par,x) 
+  par = par[1]
+  g = -(sum(x) / par - length(x)*exp(par)/(exp(par)-1))
+  return g
+end 
+
+
+```
+
+Data
+
+```{julia}
+d = [1645,183,37, 13,1,1]
+x = vcat(fill.(1:6, d)...)
+```
+
+### Solutions
+
+```{julia}
+res = optimize(fun_opt, [0.5])
+```
+
+```{julia}
+Optim.minimizer(res)
+```
+
+```{julia}
+find_zero(z -> grad(z, x), 0.2)
+```
+
+:::

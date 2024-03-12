@@ -1,0 +1,279 @@
+---
+title: "Discrete distributions "
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+---
+
+```{r setup, echo = FALSE}
+JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+knitr::opts_chunk$set(engine.path = list(
+  python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
+  julia = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin/"
+))
+```
+
+## Setup
+
+::: panel-tabset
+## R
+
+There is no need to install or load packages. All functionalities are
+build in. One may consider installing `distributions3` package which
+mimics `Distributions.jl` package.
+
+```{r, eval = FALSE}
+install.packages("distributions3")
+```
+
+```{r}
+library(distributions3)
+```
+
+## Python
+
+Load modules
+
+```{python}
+import scipy.stats as st
+import numpy as np
+import pandas as pd
+```
+
+## Julia
+
+Install modules
+
+```{julia, eval = F}
+using Pkg
+Pkg.add(["DataFrames", "Distributions"])
+```
+
+Load packages
+
+```{julia}
+using DataFrames
+using Distributions
+using Random
+```
+:::
+
+## Exercises from lectures (2023.02.28)
+
+::: panel-tabset
+## R
+
+Exercise 1: generate 10 pseudo-random numbers from Bernoulli(0.7)
+
+```{r}
+set.seed(20230228)
+rbinom(n=10,size=1,prob=0.7)
+```
+
+Exercise 2: generate 10 pseudo-random numbers from Binomial(50,0.7)
+
+```{r}
+set.seed(20230228)
+rbinom(n=10,size=50,prob=0.7)
+```
+
+Exercise 3: generate 10 pseudo-random numbers from Poisson(1.5)
+
+```{r}
+set.seed(20230228)
+rpois(n=10,lambda=1.5)
+rpois(10,1.5)
+```
+
+## R (`distributions3`)
+
+Exercise 1: generate 10 pseudo-random numbers from Bernoulli(0.7)
+
+```{r}
+set.seed(20230228)
+X <- Bernoulli(0.7)
+random(X, 10)
+```
+
+Exercise 2: generate 10 pseudo-random numbers from Binomial(50,0.7)
+
+```{r}
+set.seed(20230228)
+X <- Binomial(50, 0.7)
+random(X, 10)
+```
+
+Exercise 3: generate 10 pseudo-random numbers from Poisson(1.5)
+
+```{r}
+set.seed(20230228)
+X <- Poisson(1.5)
+random(X, 10)
+```
+
+## Python
+
+Exercise 1: generate 10 pseudo-random numbers from Bernoulli(0.7)
+
+```{python}
+np.random.seed(20230228)
+st.bernoulli(0.7).rvs(10)
+```
+
+Exercise 2: generate 10 pseudo-random numbers from Binomial(50,0.7)
+
+```{python}
+np.random.seed(20230228)
+st.binom(50,0.7).rvs(10)
+```
+
+Exercise 3: generate 10 pseudo-random numbers from Poisson(1.5)
+
+```{python}
+np.random.seed(20230228)
+st.poisson(1.5).rvs(10)
+```
+
+## Julia
+
+Exercise 1: generate 10 pseudo-random numbers from Bernoulli(0.7)
+
+```{julia}
+Random.seed!(20230228);
+rand(Bernoulli(0.7),10)
+```
+
+Exercise 2: generate 10 pseudo-random numbers from Binomial(50,0.7)
+
+```{julia}
+Random.seed!(20230228);
+rand(Binomial(50,0.7),10)
+```
+
+Exercise 3: generate 10 pseudo-random numbers from Poisson(1.5)
+
+```{julia}
+Random.seed!(20230228);
+rand(Poisson(1.5),10)
+```
+:::
+
+## Exercises from lectures (2023.03.14)
+
+### Exercise 1
+
+Assume that football player with success rate 0.4 shot 10 times on goal.
+Let $X$ be a random variable denoting number of successful scores.
+Please find:
+
+-   Distribution of $X$
+-   Probability that football player score exactly 4 times ($P(X=4)$)
+-   Probability that football player score at least 7 times
+    ($P(X>=7) = 1- P(X <= 6)$)
+
+::: panel-tabset
+## R
+
+```{r}
+data.frame(x = 0:10, p = dbinom(0:10,10,0.4))
+```
+
+```{r}
+dbinom(4,10,0.4)
+```
+
+```{r}
+1-pbinom(6,10,0.4)
+```
+
+## R (`distributions3`)
+
+```{r}
+X <- Binomial(10, 0.4)
+```
+
+```{r}
+data.frame(x = 0:10, p = pdf(X, 0:10))
+```
+
+```{r}
+pdf(X, 4)
+```
+
+```{r}
+1-cdf(X, 6)
+```
+
+## Python
+
+```{python}
+pd.DataFrame({"x": np.arange(10), "p" : [st.binom(10,0.4).pmf(i) for i in np.arange(10)]})
+```
+
+```{python}
+st.binom(10,0.4).pmf(4)
+```
+
+```{python}
+1 - st.binom(10,0.4).cdf(6)
+```
+
+## Julia
+
+Declare distribution
+
+```{julia}
+binom = Binomial(10,0.4)
+```
+
+```{julia}
+DataFrame(x = 0:10, p = pdf.(binom,0:10))
+```
+
+```{julia}
+pdf(binom, 4)
+```
+
+```{julia}
+1-cdf(binom,6)
+```
+:::
+
+### Exercise 2
+
+Number of car accidents in one day in some city follows Poisson
+distribution with expected value $\lambda=2$. Find the probability that
+at most 4 car accidents happen.
+
+::: panel-tabset
+## R
+
+```{r}
+ppois(4,2)
+```
+
+## R (`distributions3`)
+
+```{r}
+cdf(Poisson(2),4)
+```
+
+## Python
+
+```{python}
+st.poisson(2).cdf(4)
+```
+
+## Julia
+
+```{julia}
+cdf(Poisson(2),4)
+```
+:::

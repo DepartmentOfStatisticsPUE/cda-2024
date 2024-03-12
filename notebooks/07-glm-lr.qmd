@@ -1,0 +1,248 @@
+---
+title: "Generalized linear regression: logistic regression"
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+    df-print: kable
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+---
+
+
+```{r setup, echo = FALSE}
+JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+knitr::opts_chunk$set(engine.path = list(
+  python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
+  julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/"
+))
+```
+
+
+## Setup
+
+::: panel-tabset
+## R
+
+Install packages if necessary.
+
+```{r, eval = FALSE}
+install.packages("marginaleffects")
+install.packages("modelsummary")
+install.packages("car")
+install.packages("broom")
+```
+
+```{r}
+library(marginaleffects)
+library(modelsummary)
+library(car)
+library(broom)
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{r}
+df <- read.csv("../data/polish-jvs.csv", colClasses = c("character", "factor", rep("character", 4), "numeric"))
+head(df)
+```
+
+## Python
+
+Load modules
+
+```{bash, eval = F}
+!pip install statsmodels 
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{python}
+df = pd.read_csv("../data/polish-jvs.csv", dtype={"id": np.int64, "woj":str, "public":str,"size": str, "nace_division": str, "nace": str})
+df.head()
+```
+
+## Julia
+
+```{julia, eval = F}
+using Pkg
+Pkg.add(["Effects", "StatsBase", "CSV", "CategoricalArrays", "GLM"])
+```
+
+Load packages
+
+```{julia}
+using Effects
+using StatsBase
+using CSV
+using CategoricalArrays
+using GLM
+using Statistics
+using DataFrames
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{julia}
+df=CSV.read("../data/polish-jvs.csv", DataFrame, 
+            types = Dict(:id => Int64, :woj=> String, :public=> String, 
+                         :size => String, :nace_division => String, :nace => String));
+first(df, 5)
+```
+
+:::
+
+## Example 1 -- individual data
+
+Create new variable 
+
+$$
+\text{Has vacancies} = 
+\begin{cases}
+1 & \text{if has at least one vacancy},\\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+::: panel-tabset
+## R
+
+```{r}
+df$has_vacancy <- df$vacancies > 0
+df$size <- factor(df$size, c("Large", "Medium", "Small"))
+```
+
+Consider the following model 
+
+```{r}
+model1 <- glm(formula = has_vacancy ~ public, 
+              data = df,
+              family = binomial())
+summary(model1)
+```
+Alternativelly, we may use `modelsummary` package and the same function 
+
+```{r}
+modelsummary(model1, exponentiate = T, conf_level = 0.05, 
+             statistic  = NULL,
+             estimate  = "{estimate} [{conf.low}, {conf.high}]")
+```
+
+Let's write down this model
+
+$$
+\operatorname{Pr}(\text { Has vacancy }=1 \mid \text { public })=\frac{\exp (-2.03+0.12 \times \text { public })}{1+\exp (-2.03+0.12 \times \text { public })}
+$$
+In order to interpret results of logistic regression we should calculate odds ratio which can be done by just using $\exp(\mathbf{\beta})$
+
+```{r}
+exp(coef(model1))
+```
+
+
+Interpretation of `1.13`:
+
++ probability that a~*public* entity is 1.13 higher than the probability that a~private entity has a~vacancy.
++ another interpretation: for 100 private entities with vacancies, we will have 113 public entities with vacancies
+
+
+## Python
+
+```{python}
+df["has_vacancy"] = np.where(df["vacancies"] > 0, True, False)
+df["public"]=df["public"].astype("category")
+mod1 = smf.glm(formula="has_vacancy ~ public", data=df, family=sm.families.Binomial()).fit()
+print(mod1.summary())
+```
+
+## Julia
+
+```{julia}
+df.has_vacancy = ifelse.(df.vacancies .> 0, true, false);
+m1 = glm(@formula(has_vacancy ~ public), df, Binomial())
+```
+
+:::
+
+
+## Example 2 -- aggregated data
+
+We show that it is possible to use aggregated data for logistic regression.
+
+::: panel-tabset
+## R
+
+```{r}
+df_aggregated <- aggregate(vacancies ~ has_vacancy + public, data = df, FUN = length) |>
+  reshape(data = _, direction = "wide", idvar = c("public"), timevar = "has_vacancy", sep = "_")
+
+df_aggregated
+```
+
+```{r}
+model2 <- glm(formula = cbind(vacancies_TRUE, vacancies_FALSE) ~ public,
+              data = df_aggregated, 
+              family = binomial())
+summary(model2)
+```
+
+## Python
+
+## Julia
+
+:::
+
+
+## Example 3 -- more variables
+
+::: panel-tabset
+
+## R
+
+Consider the following model
+
+```{r}
+model3 <- glm(formula = has_vacancy ~ public + size + nace, 
+              data = df,
+              family = binomial())
+summary(model3)
+```
+
+Now, the interpretation becomes more complex, so it is better to look at plots.
+
+```{r}
+modelplot(model3, exponentiate = T) 
+```
+
+Additionally we can check whether a~given variable as a whole is "significant" using `car::Anova(type=2)`
+
+```{r}
+car::Anova(model3, type = 2) |> broom::tidy()
+```
+
+## Python
+
+```{python}
+mod3 = smf.glm(formula="has_vacancy ~ public + size + nace", data=df, family=sm.families.Binomial()).fit()
+print(mod3.summary())
+```
+
+## Julia
+
+```{julia}
+m3 = glm(@formula(has_vacancy ~ public + size + nace), df, Binomial())
+```
+
+:::
+

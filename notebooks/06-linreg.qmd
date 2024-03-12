@@ -1,0 +1,278 @@
+---
+title: "Categorical variables in regression and marginal effects"
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+    df-print: kable
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+---
+
+```{r setup, echo = FALSE}
+JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+knitr::opts_chunk$set(engine.path = list(
+  python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
+  julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/"
+))
+```
+
+
+## Setup
+
+::: panel-tabset
+## R
+
+Install `marginaleffects` packages if necessary.
+
+```{r, eval = FALSE}
+install.packages("marginaleffects")
+```
+
+```{r}
+library(marginaleffects)
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{r}
+df <- read.csv("../data/polish-jvs.csv", colClasses = c("character", "factor", rep("character", 4), "numeric"))
+head(df)
+```
+
+Check the levels
+
+```{r}
+levels(df$woj)
+```
+
+Read in the dataset for the lecture but let's consider that we forgot to specify classes/types, so `woj` is treated as numeric variable.
+
+```{r}
+df_wrong <- read.csv("../data/polish-jvs.csv")
+head(df_wrong)
+```
+
+## Python
+
+Load modules
+
+```{bash, eval = F}
+!pip install statsmodels 
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{python}
+df = pd.read_csv("../data/polish-jvs.csv", dtype={"id": np.int64, "woj":str, "public":str,"size": str, "nace_division": str, "nace": str})
+df.head()
+```
+
+Read in the dataset for the lecture but let's consider that we forgot to specify classes/types, so `woj` is treated as numeric variable.
+
+```{python}
+df_wrong = pd.read_csv("../data/polish-jvs.csv")
+df_wrong.head()
+```
+
+
+## Julia
+
+Install modules
+
+```{julia, eval = F}
+using Pkg
+Pkg.add(["Effects", "StatsBase", "CSV", "CategoricalArrays", "GLM"])
+```
+
+Load packages
+
+```{julia}
+using Effects
+using StatsBase
+using CSV
+using CategoricalArrays
+using GLM
+using Statistics
+using DataFrames
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{julia}
+df=CSV.read("../data/polish-jvs.csv", DataFrame, 
+            types = Dict(:id => Int64, :woj=> String, :public=> String, 
+                         :size => String, :nace_division => String, :nace => String));
+first(df, 5)
+```
+
+Read in the dataset for the lecture but let's consider that we forgot to specify classes/types, so `woj` is treated as numeric variable.
+
+```{julia}
+df_wrong=CSV.read("../data/polish-jvs.csv", DataFrame);
+first(df_wrong, 5)
+```
+
+:::
+
+
+## Categorical Variables in regression
+
+Consider the following model that tries to explain level of `vacancies` using `woj`. If `woj` would be treated as continuous than the postulated model has the following form
+
+$$
+\text{vacancies} = \beta_0 + \beta_1\text{woj} + \epsilon.
+$$
+However, `woj` is categorical, so this model is incorrect. We should consider the following model with *dummy variables*
+
+
+$$
+\text{vacancies} = \beta_0 + \beta_1I(\text{woj='04'})+ \beta_1I(\text{woj='06'}) + ... + \beta_1I(\text{woj='32'}) + \epsilon.
+$$
+Note that code `02` is missing, as it is the reference level.
+
+::: panel-tabset
+## R
+
+```{r}
+model1 <- lm(vacancies ~ woj, data = df_wrong)
+summary(model1)
+```
+
+```{r}
+model2 <- lm(vacancies ~ woj, data = df)
+summary(model2)
+```
+
+Compare this model with the following summary. Why they are equal? because OLS 
+
+```{r}
+tab1 <- aggregate(vacancies ~ woj, data = df, FUN = mean)
+tab1$coef_by_hand <- with(tab1, vacancies-vacancies[1])
+tab1$coef <- coef(model2)
+head(tab1)
+```
+```{r}
+model3 <- lm(vacancies ~ relevel(woj, ref = "30"), data = df)
+summary(model3)
+```
+
+```{r}
+model4 <- lm(formula = vacancies ~ woj, data = df, contrasts = list(woj = contr.sum))
+summary(model4)
+```
+
+0.82902 -- average of averages
+
+```{r}
+mean(tab1$vacancies)
+```
+
+## Python
+
+```{python}
+model1 = smf.ols("vacancies ~ woj", data = df_wrong).fit()
+print(model1.summary())
+```
+
+```{python}
+model2 = smf.ols("vacancies ~ woj", data = df).fit()
+print(model2.summary())
+```
+
+```{python}
+model3 = smf.ols("vacancies ~ C(woj, Treatment(reference='30'))", data = df).fit()
+print(model3.summary())
+```
+
+```{python}
+model4 = smf.ols("vacancies ~ C(woj, Sum)", data = df).fit()
+print(model4.summary())
+```
+
+
+## Julia
+
+```{julia}
+model1 = lm(@formula(vacancies ~ woj), df_wrong)
+```
+```{julia}
+model2 = lm(@formula(vacancies ~ woj), df)
+```
+
+```{julia}
+model3 = lm(@formula(vacancies ~ woj), df, contrasts = Dict(:woj => DummyCoding(base="30")))
+```
+```{julia}
+model4 = lm(@formula(vacancies ~ woj), df, contrasts = Dict(:woj => EffectsCoding()))
+```
+
+:::
+
+## Margial effects
+
+
+Consider the following model
+
+$$
+\text{vacancies} = \text{woj} + \text{size} + \text{public} + \text{woj}\times\text{size} +\text{woj}\times\text{public}, 
+$$
+
+where variable `woj` is present two times and $\times$ means interaction between two variables.
+
+::: panel-tabset
+## R
+Marginal effects
+
+```{r}
+model5 <- lm(vacancies ~ woj*size + woj*public, df)
+summary(model5)
+```
+
+Calculate **Average Marginal Effects**.
+
+```{r}
+avg_slopes(model5)
+```
+
+Calculate **Marginal Effects at means**.
+
+```{r}
+avg_slopes(model5, newdata = "mean")
+```
+
+## Python
+
+Marginal effects are not implemented for `ols` in `statsmodels` module.
+
+## Julia
+
+```{julia}
+model5 = lm(@formula(vacancies ~ woj*size + woj*public), df)
+```
+
+`Effects.jl` returns marginal effects for each level separaterly, not as deviations from the reference level.
+
+```{julia}
+vcat(
+  effects(Dict(:woj => sort(unique(df.woj))), model5),
+  effects(Dict(:public => sort(unique(df.public))), model5),
+  effects(Dict(:size => sort(unique(df.size))), model5), 
+  cols = :union
+)
+```
+
+:::
+
+

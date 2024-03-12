@@ -1,0 +1,225 @@
+---
+title: "Generalized linear regression: count regression"
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+    df-print: kable
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+---
+
+```{r setup, echo = FALSE}
+#JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+knitr::opts_chunk$set(engine.path = list(
+  python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10"
+  #,
+#  julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/"
+))
+```
+
+
+# Setup
+
+::: panel-tabset
+## R
+
+```{r}
+library(MASS) ## glm.nb
+library(countreg)
+library(performance)
+library(modelsummary)
+library(boot)
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{r}
+df <- read.csv("../data/polish-jvs.csv", colClasses = c("character", "factor", rep("character", 4), "numeric"))
+head(df)
+```
+
+## Python
+
+Load modules
+
+```{bash, eval = F}
+!pip install statsmodels 
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{python}
+df = pd.read_csv("../data/polish-jvs.csv", dtype={"id": np.int64, "woj":str, "public":str,"size": str, "nace_division": str, "nace": str})
+df.head()
+```
+
+## Julia
+
+```{julia, eval = F}
+using Pkg
+Pkg.add(["Effects", "StatsBase", "CSV", "CategoricalArrays", "GLM"])
+```
+
+Load packages
+
+```{julia, eval = F}
+using Effects
+using StatsBase
+using CSV
+using CategoricalArrays
+using GLM
+using Statistics
+using DataFrames
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{julia, eval = F}
+df=CSV.read("../data/polish-jvs.csv", DataFrame, 
+            types = Dict(:id => Int64, :woj=> String, :public=> String, 
+                         :size => String, :nace_division => String, :nace => String));
+first(df, 5)
+```
+
+:::
+
+# Poisson
+
+::: panel-tabset
+## R
+
+```{r}
+m1 <- glm(vacancies ~ size + public + woj, data = df, family = poisson())
+m2 <- glm(vacancies ~ size + public + woj, data = df, family = quasipoisson())
+```
+
+```{r}
+summary(m2)
+```
+
+Dispersion parameter $\phi = 38.06172$ which can be calculated based on `m1` model:
+
+```{r}
+pearson_r <- residuals(m1, type = "pearson")
+sum(pearson_r^2)/m1$df.residual
+```
+
+This means that the variance of residuals is 37 times larger than the mean, and thus we should adjust standard errors by `r sqrt(sum(pearson_r^2)/m1$df.residual)`. So, lets check and compare standard errors from `m2` with those from `m1`.
+
+```{r}
+summary(summary(m2)$coef[,2]/summary(m1)$coef[,2])
+```
+
+Now, compare estimated parameters and their standard errors.
+
+```{r}
+modelsummary(list("Poisson"=m1, "QPoisson"=m2))
+```
+
+
+```{r}
+rootogram(m1, main= "Poisson")
+```
+
+```{r}
+glm.diag.plots(m1)
+```
+
+```{r}
+exp(coef(m1))
+```
+Interpretation:
+
++ if the company size decreases from big to medium (ceteris paribus) then average number of vacancies decrease by 86% (1- 0.14).
++ if we compare companies from dolnośląskie (02) with mazowieckie (14, `woj14`; ceteris paribus) then average number of vacancies will increase by 80%.
+
+## Python
+
+
+```{python}
+m1 = smf.glm(formula="vacancies ~ size + public + woj", data=df, family=sm.families.Poisson()).fit()
+print(m1.summary())
+```
+
+QuasiPoisson is Negative Binomial type 1 and can be fitted using `statsmodels.discrete.discrete_model.NegativeBinomial(loglike_method="nb2")`
+
+## Julia
+
+:::
+
+
+# Negative binomial
+
+::: panel-tabset
+## R
+
+```{r}
+m3 <- glm.nb(vacancies ~ size + public + woj, data = df)
+m3
+```
+
+```{r}
+summary(m3)
+```
+
+```{r}
+rootogram(m3, main= "NB")
+```
+
+```{r}
+glm.diag.plots(m3)
+```
+
+```{r}
+exp(coef(m3))
+```
+
+Interpretation (the same as for Poisson regression):
+
++ if the company size decreases from big to medium (ceteris paribus) then average number of vacancies decrease by 86% (1- 0.14).
++ if we compare companies from dolnośląskie (02) with mazowieckie (14, `woj14`; ceteris paribus) then average number of vacancies will increase by 80%.
+
+
+## Python
+
+```{python}
+m3 = smf.glm(formula="vacancies ~ size + public + woj", data=df, family=sm.families.NegativeBinomial()).fit()
+print(m3.summary())
+```
+
+## Julia
+
+:::
+
+
+# Which model is better?
+
+::: panel-tabset
+## R
+
+```{r}
+BIC(m1, m3)
+```
+
+```{r}
+modelplot(list("Poisson"=m1,"QuasiPoisson"=m2, "NegBin"=m3))
+```
+
+
+## Python
+
+## Julia
+
+:::

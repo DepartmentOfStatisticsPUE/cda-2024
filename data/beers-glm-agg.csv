@@ -1,0 +1,416 @@
+id,hhsize,klm,education,woj,beers
+000605,1 Person,3.20-49k,University,Zachodniopomorskie,28
+001107,1 Person,2.under 20k,University,Zachodniopomorskie,4
+001643,1 Person,4.50-99k,Secondary School Finished,Łódzkie,3
+001695,1 Person,3.20-49k,Secondary School Finished,Zachodniopomorskie,6
+002996,1 Person,3.20-49k,Secondary School Finished,Mazowieckie,14
+003125,1 Person,7.500k+,Secondary School Finished,Mazowieckie,2
+010026,1 Person,5.100-200k,Secondary School Finished,Opolskie,46
+013600,1 Person,1.village,Secondary School Finished,Świętokrzyskie,2
+013605,1 Person,7.500k+,University,Mazowieckie,2
+013792,1 Person,3.20-49k,University,Mazowieckie,1
+013947,1 Person,6.200-500k,University,Świętokrzyskie,6
+020040,1 Person,2.under 20k,Secondary School Finished,Kujawsko-Pomorskie,1
+020506,1 Person,1.village,Secondary School Finished,Łódzkie,9
+030556,1 Person,3.20-49k,Secondary School Finished,Śląskie,91
+030650,1 Person,4.50-99k,Secondary School Finished,Śląskie,75
+031348,1 Person,5.100-200k,Secondary School Finished,Warmińsko-Mazurskie,1
+031392,1 Person,6.200-500k,Secondary School Finished,Śląskie,2
+031699,1 Person,7.500k+,University,Mazowieckie,35
+031904,1 Person,6.200-500k,University,Podlaskie,11
+033133,1 Person,3.20-49k,Secondary School Finished,Dolnośląskie,9
+033270,1 Person,4.50-99k,Secondary School Finished,Świętokrzyskie,6
+033272,1 Person,6.200-500k,Secondary School Finished,Świętokrzyskie,5
+033688,1 Person,3.20-49k,Secondary School Finished,Łódzkie,4
+033834,1 Person,7.500k+,Secondary School Finished,Mazowieckie,12
+033952,1 Person,3.20-49k,Secondary School Finished,Śląskie,13
+040606,1 Person,2.under 20k,University,Mazowieckie,1
+040663,1 Person,6.200-500k,Secondary School Finished,Pomorskie,16
+040883,1 Person,3.20-49k,Secondary School Finished,Wielkopolskie,2
+041052,1 Person,7.500k+,University,Wielkopolskie,6
+041261,1 Person,3.20-49k,Profession Or Secondary,Opolskie,2
+041270,1 Person,3.20-49k,Primary,Opolskie,2
+041286,1 Person,5.100-200k,Profession Or Secondary,Śląskie,199
+041297,1 Person,6.200-500k,Secondary School Finished,Śląskie,1
+041313,1 Person,6.200-500k,Secondary School Finished,Śląskie,1
+041654,1 Person,7.500k+,University,Dolnośląskie,642
+041721,1 Person,2.under 20k,University,Łódzkie,1
+041844,1 Person,7.500k+,Secondary School Finished,Dolnośląskie,45
+041913,1 Person,2.under 20k,University,Warmińsko-Mazurskie,3
+041956,1 Person,3.20-49k,Secondary School Finished,Śląskie,5
+042224,1 Person,5.100-200k,University,Małopolskie,1
+043288,1 Person,1.village,Secondary School Finished,Wielkopolskie,1
+050139,1 Person,2.under 20k,Secondary School Finished,Zachodniopomorskie,6
+050244,1 Person,6.200-500k,Secondary School Finished,Świętokrzyskie,3
+050487,1 Person,1.village,Secondary School Finished,Lubelskie,177
+050549,1 Person,2.under 20k,University,Mazowieckie,6
+051017,1 Person,1.village,University,Kujawsko-Pomorskie,2
+051083,1 Person,6.200-500k,Secondary School Finished,Podlaskie,2
+051098,1 Person,5.100-200k,Secondary School Finished,Podkarpackie,234
+051243,1 Person,6.200-500k,Secondary School Finished,Mazowieckie,49
+060099,1 Person,4.50-99k,Profession Or Secondary,Lubelskie,2
+060107,1 Person,5.100-200k,University,Kujawsko-Pomorskie,71
+060112,1 Person,4.50-99k,University,Dolnośląskie,2
+060129,1 Person,1.village,Primary,Kujawsko-Pomorskie,2
+060375,1 Person,4.50-99k,University,Podkarpackie,24
+060461,1 Person,7.500k+,University,Mazowieckie,8
+060810,1 Person,7.500k+,University,Małopolskie,33
+060830,1 Person,7.500k+,Secondary School Finished,Dolnośląskie,8
+060934,1 Person,3.20-49k,Secondary School Finished,Dolnośląskie,6
+061029,1 Person,1.village,Secondary School Finished,Małopolskie,7
+061106,1 Person,5.100-200k,University,Małopolskie,7
+061630,1 Person,4.50-99k,Profession Or Secondary,Śląskie,8
+061719,1 Person,5.100-200k,Secondary School Finished,Śląskie,3
+061767,1 Person,6.200-500k,Secondary School Finished,Pomorskie,5
+070046,1 Person,6.200-500k,Secondary School Finished,Śląskie,13
+070079,1 Person,6.200-500k,Secondary School Finished,Kujawsko-Pomorskie,36
+070180,1 Person,5.100-200k,University,Podkarpackie,11
+070247,1 Person,6.200-500k,Secondary School Finished,Śląskie,4
+070463,1 Person,7.500k+,University,Małopolskie,74
+070552,1 Person,7.500k+,Secondary School Finished,Mazowieckie,8
+071259,1 Person,7.500k+,University,Dolnośląskie,2
+071775,1 Person,6.200-500k,Profession Or Secondary,Pomorskie,5
+072441,1 Person,1.village,University,Zachodniopomorskie,12
+072938,1 Person,7.500k+,Secondary School Finished,Mazowieckie,96
+073299,1 Person,2.under 20k,Profession Or Secondary,Dolnośląskie,2
+073681,1 Person,6.200-500k,University,Kujawsko-Pomorskie,4
+073712,1 Person,4.50-99k,University,Lubelskie,16
+073715,1 Person,4.50-99k,University,Lubelskie,11
+073836,1 Person,4.50-99k,Secondary School Finished,Łódzkie,4
+074230,1 Person,1.village,Secondary School Finished,Podkarpackie,9
+074536,1 Person,6.200-500k,University,Śląskie,58
+075144,1 Person,4.50-99k,Profession Or Secondary,Lubelskie,28
+075207,1 Person,5.100-200k,Secondary School Finished,Śląskie,4
+075778,1 Person,4.50-99k,Profession Or Secondary,Śląskie,10
+075780,1 Person,4.50-99k,Secondary School Finished,Śląskie,15
+080264,1 Person,1.village,University,Lubuskie,5
+080288,1 Person,6.200-500k,Primary,Kujawsko-Pomorskie,1
+080369,1 Person,7.500k+,University,Mazowieckie,1
+080395,1 Person,6.200-500k,University,Mazowieckie,1
+080471,1 Person,5.100-200k,University,Opolskie,76
+080503,1 Person,5.100-200k,Secondary School Finished,Śląskie,194
+080755,1 Person,1.village,University,Podkarpackie,4
+080841,1 Person,1.village,Profession Or Secondary,Zachodniopomorskie,66
+080928,1 Person,4.50-99k,University,Pomorskie,26
+081088,1 Person,7.500k+,University,Łódzkie,8
+081132,1 Person,6.200-500k,Secondary School Finished,Zachodniopomorskie,7
+081143,1 Person,1.village,University,Wielkopolskie,15
+081454,1 Person,5.100-200k,Secondary School Finished,Warmińsko-Mazurskie,8
+081514,1 Person,2.under 20k,University,Warmińsko-Mazurskie,5
+081536,1 Person,2.under 20k,Secondary School Finished,Świętokrzyskie,7
+081621,1 Person,3.20-49k,Secondary School Finished,Lubuskie,11
+082354,1 Person,1.village,University,Podlaskie,7
+082365,1 Person,3.20-49k,Secondary School Finished,Mazowieckie,5
+082425,1 Person,6.200-500k,University,Mazowieckie,1
+082499,1 Person,2.under 20k,University,Warmińsko-Mazurskie,27
+082643,1 Person,3.20-49k,Secondary School Finished,Zachodniopomorskie,8
+082707,1 Person,2.under 20k,University,Zachodniopomorskie,4
+082786,1 Person,4.50-99k,Secondary School Finished,Dolnośląskie,1
+082830,1 Person,2.under 20k,University,Dolnośląskie,62
+082902,1 Person,5.100-200k,Secondary School Finished,Śląskie,9
+082920,1 Person,4.50-99k,Secondary School Finished,Podlaskie,2
+082972,1 Person,1.village,University,Dolnośląskie,18
+083047,1 Person,5.100-200k,Secondary School Finished,Podkarpackie,2
+083060,1 Person,6.200-500k,University,Podlaskie,1
+083111,1 Person,1.village,University,Świętokrzyskie,62
+083197,1 Person,4.50-99k,University,Wielkopolskie,1
+083211,1 Person,3.20-49k,Secondary School Finished,Śląskie,4
+083377,1 Person,6.200-500k,Primary,Kujawsko-Pomorskie,71
+083492,1 Person,4.50-99k,Secondary School Finished,Łódzkie,1
+084731,1 Person,1.village,Secondary School Finished,Podkarpackie,48
+084732,1 Person,1.village,Secondary School Finished,Podkarpackie,48
+084909,1 Person,6.200-500k,Secondary School Finished,Śląskie,4
+084951,1 Person,2.under 20k,Secondary School Finished,Warmińsko-Mazurskie,5
+084956,1 Person,1.village,Secondary School Finished,Warmińsko-Mazurskie,1
+084995,1 Person,2.under 20k,University,Wielkopolskie,10
+088055,1 Person,2.under 20k,Secondary School Finished,Dolnośląskie,41
+088095,1 Person,7.500k+,Secondary School Finished,Mazowieckie,6
+088119,1 Person,3.20-49k,Secondary School Finished,Lubelskie,1
+088144,1 Person,3.20-49k,Profession Or Secondary,Śląskie,3
+088309,1 Person,7.500k+,Secondary School Finished,Mazowieckie,364
+088329,1 Person,3.20-49k,University,Dolnośląskie,4
+088351,1 Person,2.under 20k,Secondary School Finished,Świętokrzyskie,1
+088370,1 Person,4.50-99k,University,Łódzkie,58
+088438,1 Person,4.50-99k,University,Wielkopolskie,113
+088452,1 Person,2.under 20k,Secondary School Finished,Warmińsko-Mazurskie,26
+088473,1 Person,6.200-500k,University,Podlaskie,125
+088526,1 Person,5.100-200k,Secondary School Finished,Dolnośląskie,10
+088780,1 Person,5.100-200k,University,Dolnośląskie,2
+088792,1 Person,7.500k+,University,Mazowieckie,4
+088863,1 Person,7.500k+,University,Mazowieckie,1
+088948,1 Person,7.500k+,University,Małopolskie,31
+089302,1 Person,6.200-500k,University,Pomorskie,10
+089561,1 Person,7.500k+,Secondary School Finished,Mazowieckie,28
+089770,1 Person,3.20-49k,University,Pomorskie,1
+089868,1 Person,2.under 20k,University,Warmińsko-Mazurskie,1
+090105,1 Person,7.500k+,Secondary School Finished,Wielkopolskie,50
+090411,1 Person,6.200-500k,University,Pomorskie,2
+090637,1 Person,1.village,University,Wielkopolskie,3
+090987,1 Person,6.200-500k,Secondary School Finished,Podlaskie,4
+091119,1 Person,7.500k+,Profession Or Secondary,Dolnośląskie,23
+091212,1 Person,1.village,University,Małopolskie,19
+091328,1 Person,3.20-49k,Profession Or Secondary,Dolnośląskie,3
+091370,1 Person,2.under 20k,Secondary School Finished,Pomorskie,7
+091430,1 Person,1.village,University,Mazowieckie,3
+091540,1 Person,7.500k+,University,Małopolskie,5
+091547,1 Person,3.20-49k,Secondary School Finished,Śląskie,47
+091608,1 Person,7.500k+,University,Wielkopolskie,4
+091618,1 Person,6.200-500k,University,Pomorskie,12
+091995,1 Person,1.village,Secondary School Finished,Pomorskie,155
+092033,1 Person,7.500k+,University,Łódzkie,23
+092327,1 Person,3.20-49k,University,Mazowieckie,1
+092381,1 Person,4.50-99k,Secondary School Finished,Dolnośląskie,1
+092413,1 Person,7.500k+,Secondary School Finished,Łódzkie,8
+092475,1 Person,7.500k+,Secondary School Finished,Dolnośląskie,48
+092562,1 Person,5.100-200k,University,Pomorskie,1
+092624,1 Person,7.500k+,University,Małopolskie,85
+092636,1 Person,1.village,University,Podlaskie,287
+092731,1 Person,5.100-200k,University,Kujawsko-Pomorskie,4
+092822,1 Person,4.50-99k,University,Łódzkie,20
+092872,1 Person,7.500k+,University,Łódzkie,2
+092889,1 Person,7.500k+,University,Mazowieckie,8
+092946,1 Person,7.500k+,University,Mazowieckie,1
+093034,1 Person,7.500k+,Secondary School Finished,Wielkopolskie,1
+093095,1 Person,2.under 20k,Secondary School Finished,Zachodniopomorskie,16
+093110,1 Person,4.50-99k,Profession Or Secondary,Łódzkie,86
+093125,1 Person,2.under 20k,Secondary School Finished,Dolnośląskie,194
+093173,1 Person,7.500k+,University,Mazowieckie,24
+093282,1 Person,7.500k+,Secondary School Finished,Mazowieckie,172
+093305,1 Person,5.100-200k,Secondary School Finished,Podkarpackie,36
+093386,1 Person,5.100-200k,Secondary School Finished,Pomorskie,3
+093519,1 Person,7.500k+,University,Dolnośląskie,5
+093522,1 Person,5.100-200k,Secondary School Finished,Warmińsko-Mazurskie,7
+093692,1 Person,2.under 20k,University,Dolnośląskie,4
+094164,1 Person,1.village,Secondary School Finished,Mazowieckie,2
+094252,1 Person,7.500k+,Secondary School Finished,Mazowieckie,1
+094363,1 Person,7.500k+,University,Małopolskie,12
+094473,1 Person,7.500k+,Secondary School Finished,Łódzkie,9
+094795,1 Person,4.50-99k,Profession Or Secondary,Dolnośląskie,181
+095550,1 Person,7.500k+,University,Mazowieckie,11
+095609,1 Person,4.50-99k,Secondary School Finished,Śląskie,1
+095613,1 Person,7.500k+,University,Mazowieckie,30
+095644,1 Person,1.village,Secondary School Finished,Dolnośląskie,81
+095786,1 Person,2.under 20k,Profession Or Secondary,Wielkopolskie,36
+095793,1 Person,1.village,University,Mazowieckie,2
+095833,1 Person,6.200-500k,University,Śląskie,71
+095848,1 Person,2.under 20k,University,Łódzkie,12
+095906,1 Person,1.village,Secondary School Finished,Małopolskie,11
+096010,1 Person,5.100-200k,University,Opolskie,146
+096127,1 Person,2.under 20k,University,Łódzkie,6
+096310,1 Person,2.under 20k,Secondary School Finished,Łódzkie,243
+096421,1 Person,3.20-49k,University,Pomorskie,53
+096670,1 Person,7.500k+,University,Wielkopolskie,48
+096751,1 Person,4.50-99k,Secondary School Finished,Podkarpackie,91
+096789,1 Person,4.50-99k,Secondary School Finished,Zachodniopomorskie,1
+096821,1 Person,7.500k+,University,Mazowieckie,152
+096872,1 Person,7.500k+,University,Mazowieckie,3
+096944,1 Person,7.500k+,University,Dolnośląskie,71
+097031,1 Person,7.500k+,Secondary School Finished,Łódzkie,55
+097093,1 Person,1.village,Secondary School Finished,Podkarpackie,313
+097235,1 Person,6.200-500k,Secondary School Finished,Śląskie,3
+097523,1 Person,6.200-500k,Secondary School Finished,Pomorskie,13
+097675,1 Person,4.50-99k,Secondary School Finished,Podkarpackie,10
+097722,1 Person,3.20-49k,Profession Or Secondary,Mazowieckie,60
+097742,1 Person,5.100-200k,University,Opolskie,6
+097772,1 Person,4.50-99k,Secondary School Finished,Pomorskie,43
+097821,1 Person,6.200-500k,University,Mazowieckie,2
+097825,1 Person,3.20-49k,University,Mazowieckie,1
+097933,1 Person,3.20-49k,Secondary School Finished,Opolskie,5
+098015,1 Person,7.500k+,University,Łódzkie,9
+098028,1 Person,2.under 20k,University,Lubuskie,21
+098418,1 Person,6.200-500k,University,Śląskie,4
+098578,1 Person,6.200-500k,Secondary School Finished,Podlaskie,227
+098676,1 Person,3.20-49k,Primary,Wielkopolskie,1
+098769,1 Person,2.under 20k,University,Podkarpackie,6
+098802,1 Person,2.under 20k,Profession Or Secondary,Dolnośląskie,70
+098818,1 Person,2.under 20k,Secondary School Finished,Dolnośląskie,19
+098850,1 Person,7.500k+,Profession Or Secondary,Mazowieckie,1
+098865,1 Person,1.village,University,Pomorskie,8
+098872,1 Person,2.under 20k,Secondary School Finished,Mazowieckie,28
+098874,1 Person,5.100-200k,University,Kujawsko-Pomorskie,193
+098879,1 Person,6.200-500k,Secondary School Finished,Pomorskie,1
+098888,1 Person,6.200-500k,Secondary School Finished,Lubelskie,11
+098889,1 Person,6.200-500k,Secondary School Finished,Lubelskie,15
+098895,1 Person,6.200-500k,University,Pomorskie,96
+098903,1 Person,6.200-500k,University,Śląskie,21
+098912,1 Person,4.50-99k,University,Warmińsko-Mazurskie,5
+098918,1 Person,2.under 20k,Secondary School Finished,Dolnośląskie,63
+098920,1 Person,7.500k+,Secondary School Finished,Łódzkie,1
+098925,1 Person,6.200-500k,University,Śląskie,8
+098933,1 Person,7.500k+,University,Łódzkie,15
+098936,1 Person,6.200-500k,University,Zachodniopomorskie,11
+098946,1 Person,5.100-200k,University,Dolnośląskie,37
+098952,1 Person,1.village,Secondary School Finished,Opolskie,7
+098953,1 Person,6.200-500k,University,Zachodniopomorskie,2
+098963,1 Person,2.under 20k,Profession Or Secondary,Lubelskie,4
+098971,1 Person,7.500k+,Secondary School Finished,Dolnośląskie,19
+098980,1 Person,2.under 20k,Secondary School Finished,Podkarpackie,13
+098984,1 Person,6.200-500k,University,Pomorskie,2
+098985,1 Person,4.50-99k,Secondary School Finished,Lubelskie,6
+098991,1 Person,3.20-49k,University,Wielkopolskie,4
+098998,1 Person,6.200-500k,Secondary School Finished,Pomorskie,138
+099004,1 Person,6.200-500k,Secondary School Finished,Kujawsko-Pomorskie,1
+099024,1 Person,5.100-200k,University,Warmińsko-Mazurskie,7
+099027,1 Person,1.village,University,Wielkopolskie,5
+099030,1 Person,3.20-49k,Secondary School Finished,Wielkopolskie,13
+099031,1 Person,7.500k+,Secondary School Finished,Mazowieckie,371
+099052,1 Person,2.under 20k,University,Pomorskie,73
+099060,1 Person,2.under 20k,Secondary School Finished,Dolnośląskie,1
+099062,1 Person,7.500k+,Secondary School Finished,Małopolskie,1
+099064,1 Person,6.200-500k,University,Śląskie,192
+099065,1 Person,2.under 20k,University,Lubelskie,10
+099067,1 Person,2.under 20k,University,Warmińsko-Mazurskie,1
+099069,1 Person,3.20-49k,Secondary School Finished,Warmińsko-Mazurskie,23
+099074,1 Person,5.100-200k,University,Podkarpackie,4
+099089,1 Person,5.100-200k,University,Dolnośląskie,10
+099099,1 Person,2.under 20k,Secondary School Finished,Dolnośląskie,3
+099120,1 Person,1.village,Secondary School Finished,Lubuskie,12
+099183,1 Person,5.100-200k,Profession Or Secondary,Śląskie,4
+099203,1 Person,5.100-200k,Secondary School Finished,Zachodniopomorskie,6
+099228,1 Person,3.20-49k,Secondary School Finished,Łódzkie,1
+099350,1 Person,1.village,Secondary School Finished,Zachodniopomorskie,6
+099368,1 Person,3.20-49k,University,Zachodniopomorskie,4
+099389,1 Person,6.200-500k,Secondary School Finished,Pomorskie,80
+099392,1 Person,6.200-500k,Secondary School Finished,Podlaskie,34
+099396,1 Person,6.200-500k,University,Zachodniopomorskie,22
+099399,1 Person,6.200-500k,University,Kujawsko-Pomorskie,13
+099432,1 Person,3.20-49k,University,Łódzkie,20
+099444,1 Person,6.200-500k,University,Śląskie,291
+099504,1 Person,1.village,University,Dolnośląskie,51
+099567,1 Person,6.200-500k,University,Kujawsko-Pomorskie,2
+099598,1 Person,3.20-49k,University,Warmińsko-Mazurskie,24
+099628,1 Person,2.under 20k,Secondary School Finished,Opolskie,29
+099803,1 Person,7.500k+,University,Małopolskie,35
+099866,1 Person,1.village,University,Warmińsko-Mazurskie,61
+099869,1 Person,7.500k+,University,Mazowieckie,13
+099885,1 Person,7.500k+,University,Wielkopolskie,6
+099906,1 Person,7.500k+,University,Mazowieckie,99
+099941,1 Person,5.100-200k,Secondary School Finished,Opolskie,24
+099991,1 Person,7.500k+,Secondary School Finished,Mazowieckie,118
+100041,1 Person,6.200-500k,Secondary School Finished,Kujawsko-Pomorskie,11
+100042,1 Person,7.500k+,Secondary School Finished,Mazowieckie,42
+100049,1 Person,7.500k+,University,Mazowieckie,3
+100050,1 Person,1.village,Secondary School Finished,Kujawsko-Pomorskie,4
+100121,1 Person,6.200-500k,University,Pomorskie,89
+100125,1 Person,1.village,University,Łódzkie,2
+100130,1 Person,3.20-49k,Secondary School Finished,Podkarpackie,3
+100139,1 Person,5.100-200k,Secondary School Finished,Śląskie,2
+100143,1 Person,1.village,University,Wielkopolskie,1
+100286,1 Person,7.500k+,University,Mazowieckie,36
+100287,1 Person,6.200-500k,Secondary School Finished,Pomorskie,36
+100292,1 Person,6.200-500k,Secondary School Finished,Pomorskie,6
+100298,1 Person,6.200-500k,Secondary School Finished,Pomorskie,22
+100367,1 Person,7.500k+,University,Mazowieckie,378
+100397,1 Person,1.village,Secondary School Finished,Podlaskie,23
+100398,1 Person,5.100-200k,University,Śląskie,117
+100406,1 Person,2.under 20k,Secondary School Finished,Śląskie,33
+100413,1 Person,1.village,University,Lubelskie,36
+100427,1 Person,1.village,University,Dolnośląskie,93
+100448,1 Person,2.under 20k,University,Kujawsko-Pomorskie,115
+100449,1 Person,5.100-200k,University,Pomorskie,9
+100452,1 Person,7.500k+,Secondary School Finished,Małopolskie,35
+100500,1 Person,1.village,University,Śląskie,42
+100501,1 Person,6.200-500k,Secondary School Finished,Zachodniopomorskie,48
+100535,1 Person,6.200-500k,University,Pomorskie,148
+100553,1 Person,5.100-200k,University,Dolnośląskie,1
+100569,1 Person,1.village,Secondary School Finished,Łódzkie,8
+100580,1 Person,4.50-99k,University,Mazowieckie,1
+100598,1 Person,7.500k+,Secondary School Finished,Mazowieckie,27
+100600,1 Person,5.100-200k,Secondary School Finished,Śląskie,45
+100604,1 Person,1.village,Secondary School Finished,Mazowieckie,16
+100651,1 Person,7.500k+,University,Mazowieckie,1
+100679,1 Person,1.village,Secondary School Finished,Mazowieckie,39
+100703,1 Person,7.500k+,Secondary School Finished,Małopolskie,19
+100708,1 Person,7.500k+,Secondary School Finished,Mazowieckie,106
+100727,1 Person,6.200-500k,Secondary School Finished,Mazowieckie,1
+100738,1 Person,7.500k+,Secondary School Finished,Małopolskie,2
+100753,1 Person,7.500k+,Secondary School Finished,Łódzkie,2
+100754,1 Person,3.20-49k,Secondary School Finished,Mazowieckie,11
+100788,1 Person,2.under 20k,Secondary School Finished,Małopolskie,1
+100867,1 Person,4.50-99k,University,Lubelskie,25
+100884,1 Person,1.village,University,Śląskie,8
+100902,1 Person,7.500k+,University,Mazowieckie,7
+100970,1 Person,7.500k+,University,Mazowieckie,19
+101024,1 Person,2.under 20k,University,Małopolskie,25
+101057,1 Person,2.under 20k,University,Lubuskie,1
+101163,1 Person,6.200-500k,University,Zachodniopomorskie,9
+110005,1 Person,3.20-49k,Secondary School Finished,Śląskie,59
+110006,1 Person,7.500k+,University,Mazowieckie,2
+110101,1 Person,1.village,Profession Or Secondary,Warmińsko-Mazurskie,2
+590009,1 Person,6.200-500k,University,Kujawsko-Pomorskie,245
+590015,1 Person,4.50-99k,University,Śląskie,1
+590025,1 Person,4.50-99k,Secondary School Finished,Świętokrzyskie,18
+590044,1 Person,6.200-500k,University,Lubelskie,44
+590051,1 Person,1.village,Secondary School Finished,Śląskie,27
+590061,1 Person,7.500k+,Secondary School Finished,Wielkopolskie,74
+590079,1 Person,4.50-99k,University,Łódzkie,7
+590085,1 Person,7.500k+,University,Mazowieckie,30
+590090,1 Person,7.500k+,University,Małopolskie,9
+590098,1 Person,7.500k+,University,Łódzkie,4
+590116,1 Person,1.village,University,Warmińsko-Mazurskie,5
+590150,1 Person,3.20-49k,Secondary School Finished,Opolskie,96
+590192,1 Person,3.20-49k,Secondary School Finished,Małopolskie,8
+590197,1 Person,5.100-200k,Secondary School Finished,Warmińsko-Mazurskie,72
+590201,1 Person,6.200-500k,University,Śląskie,9
+590264,1 Person,4.50-99k,Secondary School Finished,Wielkopolskie,4
+590321,1 Person,1.village,University,Warmińsko-Mazurskie,2
+590322,1 Person,4.50-99k,University,Świętokrzyskie,44
+880302,1 Person,3.20-49k,Secondary School Finished,Opolskie,3
+881033,1 Person,5.100-200k,Profession Or Secondary,Śląskie,30
+881057,1 Person,6.200-500k,University,Pomorskie,97
+881404,1 Person,3.20-49k,Secondary School Finished,Pomorskie,8
+881475,1 Person,7.500k+,University,Mazowieckie,4
+881601,1 Person,7.500k+,University,Mazowieckie,8
+881702,1 Person,7.500k+,University,Mazowieckie,39
+881714,1 Person,7.500k+,University,Mazowieckie,4
+881761,1 Person,7.500k+,Secondary School Finished,Małopolskie,1
+882004,1 Person,7.500k+,University,Mazowieckie,67
+882011,1 Person,6.200-500k,Secondary School Finished,Pomorskie,14
+882080,1 Person,5.100-200k,Secondary School Finished,Lubuskie,11
+882096,1 Person,7.500k+,University,Małopolskie,4
+882124,1 Person,7.500k+,University,Wielkopolskie,10
+882299,1 Person,7.500k+,Secondary School Finished,Łódzkie,102
+882301,1 Person,7.500k+,University,Mazowieckie,26
+882513,1 Person,5.100-200k,Secondary School Finished,Warmińsko-Mazurskie,2
+888103,1 Person,4.50-99k,Secondary School Finished,Dolnośląskie,4
+888114,1 Person,6.200-500k,Secondary School Finished,Śląskie,172
+888164,1 Person,3.20-49k,University,Opolskie,100
+888216,1 Person,3.20-49k,University,Dolnośląskie,4
+888263,1 Person,1.village,Profession Or Secondary,Małopolskie,54
+888347,1 Person,7.500k+,Secondary School Finished,Małopolskie,4
+888443,1 Person,1.village,University,Warmińsko-Mazurskie,18
+930027,1 Person,6.200-500k,University,Śląskie,2
+930074,1 Person,3.20-49k,Profession Or Secondary,Śląskie,6
+930376,1 Person,4.50-99k,Secondary School Finished,Podlaskie,51
+930387,1 Person,7.500k+,Secondary School Finished,Małopolskie,4
+930941,1 Person,2.under 20k,Primary,Kujawsko-Pomorskie,2
+940345,1 Person,4.50-99k,Secondary School Finished,Dolnośląskie,14
+950587,1 Person,3.20-49k,University,Łódzkie,6
+950758,1 Person,5.100-200k,Secondary School Finished,Warmińsko-Mazurskie,8
+951265,1 Person,6.200-500k,Secondary School Finished,Kujawsko-Pomorskie,22
+952077,1 Person,6.200-500k,Profession Or Secondary,Śląskie,6
+952390,1 Person,4.50-99k,University,Śląskie,2
+960950,1 Person,2.under 20k,Profession Or Secondary,Lubelskie,2
+961762,1 Person,3.20-49k,University,Mazowieckie,87
+961871,1 Person,3.20-49k,Primary,Łódzkie,3
+961953,1 Person,6.200-500k,Secondary School Finished,Kujawsko-Pomorskie,24
+970314,1 Person,1.village,University,Małopolskie,2
+970457,1 Person,6.200-500k,Secondary School Finished,Zachodniopomorskie,2
+970652,1 Person,4.50-99k,Secondary School Finished,Śląskie,2
+970838,1 Person,1.village,Primary,Śląskie,16
+972310,1 Person,4.50-99k,University,Wielkopolskie,79
+973006,1 Person,7.500k+,University,Mazowieckie,47
+973174,1 Person,4.50-99k,Secondary School Finished,Dolnośląskie,2
+974083,1 Person,7.500k+,Secondary School Finished,Łódzkie,60
+982281,1 Person,3.20-49k,Secondary School Finished,Małopolskie,2
+982875,1 Person,3.20-49k,University,Małopolskie,5
+982962,1 Person,7.500k+,Primary,Łódzkie,4
+983482,1 Person,7.500k+,University,Mazowieckie,208
+983505,1 Person,5.100-200k,Profession Or Secondary,Warmińsko-Mazurskie,8
+984474,1 Person,5.100-200k,University,Dolnośląskie,16
+984646,1 Person,2.under 20k,Secondary School Finished,Lubuskie,4
+984918,1 Person,6.200-500k,University,Pomorskie,6
+990656,1 Person,2.under 20k,Secondary School Finished,Mazowieckie,2
+991789,1 Person,4.50-99k,Secondary School Finished,Mazowieckie,1
+992067,1 Person,5.100-200k,University,Dolnośląskie,2
+993205,1 Person,3.20-49k,Profession Or Secondary,Dolnośląskie,3
