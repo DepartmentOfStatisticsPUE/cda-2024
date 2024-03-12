@@ -1,0 +1,233 @@
+---
+title: "Example test"
+format: 
+  html:
+    echo: false
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+    df-print: kable
+---
+
+
+# Question 1
+
+Consider the following variable: **Number of ice creams eaten by kindergarten children in a given week in Poznań** presented below:
+
+```{r}
+# Set a seed for reproducibility
+set.seed(123)
+
+# Define the parameters
+n <- 10000  # number of observations
+p_zero <- 0.7  # proportion of extra zeros
+lambda <- 2  # Poisson parameter
+X <- runif(n, -1, 1)  # predictor variable
+W <- runif(n, -1, 1)  # predictor variable for zero-inflation
+b <- 1  # regression coefficient
+g <- -0.8  # regression coefficient for zero-inflation
+
+# Generate binary indicators for the zero process
+zero_process <- rbinom(n, 1, 1 / (1 + exp(-W * g)))
+
+# Generate counts for the non-zero process
+poisson_process <- rpois(n, exp(X * b))
+
+# Generate the zero-inflated data
+Y <- zero_process * 0 + (1 - zero_process) * poisson_process
+barplot(table(Y), 
+        main = "Number of ice creams eaten by \nkindergarten children in a given week in Poznań",
+        xlab = "Ice creams",
+        ylab = "Number of children")
+```
+
+We observe a lot of zeros, so we should consider models that fit such data: zero-inflated or hurdle. Which model should we use and why? Justify your answer.
+
+
+# Question 2
+
+Given the following outputs please answer the following questions:
+
+1. What models were fitted?
+2. Which model is better and why?
+3. Provide interpretation of parameter `school` for the count model and `school` for the zero-inflated model.
+
+
+Model 1
+
+```r
+Call:
+zeroinfl(formula = daysabs ~ gender + school + mathnce + langnce, data = df, dist = "poisson")
+
+Pearson residuals:
+   Min     1Q Median     3Q    Max 
+-2.483 -1.229 -0.678  0.591 12.991 
+
+Count model coefficients (poisson with log link):
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  3.106464   0.087154  35.644  < 2e-16 ***
+gendermale  -0.275673   0.048705  -5.660 1.51e-08 ***
+school      -0.671446   0.056862 -11.808  < 2e-16 ***
+mathnce      0.002475   0.001869   1.324   0.1855    
+langnce     -0.004396   0.001982  -2.217   0.0266 *  
+
+Zero-inflation model coefficients (binomial with logit link):
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -4.54127    0.73604  -6.170 6.83e-10 ***
+gendermale   0.94806    0.31765   2.985  0.00284 ** 
+school       0.81546    0.33659   2.423  0.01541 *  
+mathnce      0.01394    0.01176   1.185  0.23599    
+langnce      0.01128    0.01180   0.956  0.33906    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Number of iterations in BFGS optimization: 13 
+Log-likelihood: -1269 on 10 Df
+```
+
+```r
+Call:
+zeroinfl(formula = daysabs ~ gender + school + mathnce + langnce, data = df, dist = "negbin")
+
+Pearson residuals:
+    Min      1Q  Median      3Q     Max 
+-0.9549 -0.7045 -0.4003  0.2829  8.1607 
+
+Count model coefficients (negbin with log link):
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  3.289159   0.255687  12.864  < 2e-16 ***
+gendermale  -0.275842   0.138580  -1.990   0.0465 *  
+school      -0.771523   0.144921  -5.324 1.02e-07 ***
+mathnce      0.004195   0.004903   0.856   0.3922    
+langnce     -0.009956   0.005501  -1.810   0.0703 .  
+Log(theta)   0.003446   0.125194   0.028   0.9780    
+
+Zero-inflation model coefficients (binomial with logit link):
+            Estimate Std. Error z value Pr(>|z|)
+(Intercept) -9.31443   15.61260  -0.597    0.551
+gendermale   4.62124   15.92795   0.290    0.772
+school       0.32701    0.95434   0.343    0.732
+mathnce      0.05037    0.03578   1.408    0.159
+langnce     -0.01103    0.03939  -0.280    0.779
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Theta = 1.0035 
+Number of iterations in BFGS optimization: 29 
+Log-likelihood: -864.3 on 11 Df
+```
+
+Model 2 
+
+```r
+> BIC(m1, m2)
+   df      BIC
+Model1 10 2595.501
+Model2 11 1791.975
+```
+
+# Question 3
+
+We fitted negative binomial and zero-inflated negative binomial regression. Answer the questions based on the outputs:
+
+1. Do we observe zero-inflation? If yes, why if not, why?
+2. Based on this model can we say that males and females differ in terms of Y variable (`daysabs` days of absenteeism)? 
+
+
+Model 1
+
+```r
+Call:
+MASS::glm.nb(formula = daysabs ~ gender + school + mathnce + 
+    langnce, data = df, init.theta = 0.8687425507, link = log)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  3.371968   0.258228  13.058  < 2e-16 ***
+gendermale  -0.395827   0.134038  -2.953  0.00315 ** 
+school      -0.769076   0.144925  -5.307 1.12e-07 ***
+mathnce      0.002034   0.005125   0.397  0.69146    
+langnce     -0.009568   0.005273  -1.815  0.06959 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for Negative Binomial(0.8687) family taken to be 1)
+
+    Null deviance: 409.95  on 315  degrees of freedom
+Residual deviance: 357.39  on 311  degrees of freedom
+AIC: 1746.3
+
+Number of Fisher Scoring iterations: 1
+
+
+              Theta:  0.8687 
+          Std. Err.:  0.0860 
+
+ 2 x log-likelihood:  -1734.3020 
+```
+
+Model 2
+
+```r
+Call:
+zeroinfl(formula = daysabs ~ gender + school + mathnce + langnce, 
+    data = df, dist = "negbin")
+
+Pearson residuals:
+    Min      1Q  Median      3Q     Max 
+-0.9549 -0.7045 -0.4003  0.2829  8.1607 
+
+Count model coefficients (negbin with log link):
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  3.289159   0.255687  12.864  < 2e-16 ***
+gendermale  -0.275842   0.138580  -1.990   0.0465 *  
+school      -0.771523   0.144921  -5.324 1.02e-07 ***
+mathnce      0.004195   0.004903   0.856   0.3922    
+langnce     -0.009956   0.005501  -1.810   0.0703 .  
+Log(theta)   0.003446   0.125194   0.028   0.9780    
+
+Zero-inflation model coefficients (binomial with logit link):
+            Estimate Std. Error z value Pr(>|z|)
+(Intercept) -9.31443   15.61260  -0.597    0.551
+gendermale   4.62124   15.92795   0.290    0.772
+school       0.32701    0.95434   0.343    0.732
+mathnce      0.05037    0.03578   1.408    0.159
+langnce     -0.01103    0.03939  -0.280    0.779
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Theta = 1.0035 
+Number of iterations in BFGS optimization: 29 
+Log-likelihood: -864.3 on 11 Df
+```
+
+```r
+> AIC(m3a, m3b)
+    df      AIC
+Model1  6 1746.302
+Model2 11 1750.661
+
+> BIC(m3a, m3b)
+    df      BIC
+Model1  6 1768.837
+Model2 11 1791.975
+```
+
+# Question 4
+
+
+Specify which of these statements are true or false.
+
++ Simpson's Paradox suggests that a trend appears in different groups of data but disappears or reverses when these groups are combined.
++ Simpson's Paradox can be resolved by aggregating the data further.
++ Simpson's Paradox is an indication of a flaw in the data collection process.
+
+# Question 5
+
+Specify which of these statements are true or false.
+
++ Poisson models are preferred over Negative Binomial models when overdispersion is present in the data.
++ Both Poisson and Negative Binomial distributions have the property that the mean is equal to the variance.
++ Negative binomial distribution is a generalization of the Poisson distribution.
+
+

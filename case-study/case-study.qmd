@@ -1,0 +1,55 @@
+---
+title: "CDA: case study"
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+    df-print: kable
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+  echo: false
+---
+
+```{r}
+library(readxl)
+```
+
+# Introduction
+
+The aim of the case study is to analyse days of absenteeism (`daysabs`) of 316 students from two Los Angeles high schools (`school`) using their characteristics such as gender (`gender`), ethnicity (`ethnic`), and standardised math (`mathnce`) and language (`langnce`) scores. Example rows from the dataset are presented below
+
+
+```{r}
+df <- read_excel("school-absence-for-lecture.xlsx")
+head(df)
+```
+
+
+# Reserch questions and goals
+
+The research questions are as follows:
+
+1. what is the appropriate distribution/model of absentee days? 
+2. do males and females differ in terms of absentee days?
+3. is there a relationship between standardised test scores and student absenteeism? 
+4. if we include all the variables in the model, can we identify the most important one?
+
+In order to answer the research questions the following goals were specified:
+
+1. read the Excel file
+2. visualise `daysabs` to assess the distribution and whether zero inflation occurs,
+3. plot `daysabs` by `gender`, `ethnicity`, `school`, `mathnce` and `langnce` to assess the relationship,
+4. fit count regression models (standard and zero-inflated),
+5. evaluate the fit and select an appropriate model
+6. explain the model and parameters
+7. find important variables using the `Car::Anova` function.
+
+
+
+
+
+
