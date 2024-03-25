@@ -144,7 +144,7 @@ Likelihood Ratio 2.407058  3 0.4923221</code></pre>
 Pearson 2.388787  3 0.4957254</code></pre>
 </div>
 </div>
-<p>If we want to get standard <span class="math inline">\(chi^2\)</span> statistics using the ML approach, we need to use the <code>chisq.test</code> function with the parameter <code>p</code> referring to the probabilities from the reference distribution.</p>
+<p>If we want to get standard <span class="math inline">\(\chi^2\)</span> statistics using the ML approach, we need to use the <code>chisq.test</code> function with the parameter <code>p</code> referring to the probabilities from the reference distribution.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(<span class="fu">table</span>(X), <span class="at">p =</span> res_ml<span class="sc">$</span>fitted<span class="sc">/</span><span class="fu">sum</span>(res_ml<span class="sc">$</span>fitted))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">

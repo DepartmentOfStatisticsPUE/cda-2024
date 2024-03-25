@@ -37,7 +37,7 @@ The second object returns $\chi^2$ statistic and test, but the parameters are no
 summary(res_x2)
 ```
 
-If we want to get standard $chi^2$ statistics using the ML approach, we need to use the `chisq.test` function with the parameter `p` referring to the probabilities from the reference distribution. 
+If we want to get standard $\chi^2$ statistics using the ML approach, we need to use the `chisq.test` function with the parameter `p` referring to the probabilities from the reference distribution. 
 
 ```{r}
 chisq.test(table(X), p = res_ml$fitted/sum(res_ml$fitted))
