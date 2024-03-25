@@ -7,7 +7,7 @@
 2.  Maximum Likelihood Estimation (MLE) [[code for/from
     lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2024/blob/main/notebooks/02-mle.html)]
 3.  Goodness of fit (GoF) [[code for/from
-    lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2024/blob/main/notebooks/03-gof.html)]
+    lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2024/blob/main/notebooks/03-gof.html)] [[info about `goodfit`](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2024/blob/main/notebooks/03-gof-extra.html)]
 4. Contingency tables:
     + Simpson's paradox [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2024/blob/main/notebooks/04-simpson-paradox.html)]
     + Contingency tables and Cramer's V [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2024/blob/main/notebooks/05-ctables.html)]

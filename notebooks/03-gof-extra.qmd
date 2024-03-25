@@ -1,0 +1,45 @@
+---
+title: "Note on goodness of fit "
+format: html
+editor: visual
+---
+
+Short note on comparing the results of `vcd::goodfit` and `stats::chisq.test`.
+
+```{r}
+library(vcd)
+```
+
+Data from the lecture. 
+
+```{r}
+X <- rep(0:4, c(100,50,15,5,1))
+X_tab <- table(X)
+X_tab
+```
+
+Goodness of fit using the `vcd::goodfit` function, where $\lambda$ is estimated using maximum likelihood (`method = "ML"`) or minimum $\chi^2$ (`method = "MinChisq"`). 
+
+```{r}
+res_ml <- goodfit(X, "poisson", method = "ML")
+res_x2 <- goodfit(X, "poisson", method = "MinChisq")
+```
+
+The first object returns $G^2$ statistics and tests instead of $\chi^2$ statistics and tests.
+
+```{r}
+summary(res_ml)
+```
+
+The second object returns $\chi^2$ statistic and test, but the parameters are not estimated by maximum likelihood! 
+
+```{r}
+summary(res_x2)
+```
+
+If we want to get standard $chi^2$ statistics using the ML approach, we need to use the `chisq.test` function with the parameter `p` referring to the probabilities from the reference distribution.
+
+```{r}
+chisq.test(table(X), p = res_ml$fitted/sum(res_ml$fitted))
+```
+

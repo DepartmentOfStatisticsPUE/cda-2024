@@ -69,12 +69,9 @@ using DataFrames
 ```
 :::
 
-
-
 ## Exercise for the lecture
 
 ::: panel-tabset
-
 ## R
 
 ```{r}
@@ -94,6 +91,7 @@ The same using `fitdistrplus` package
 ```{r}
 fitdist(x, "nbinom")
 ```
+
 `fitdistrplus` package have PDF and CDF plots for assessing the fit.
 
 ```{r}
@@ -102,21 +100,20 @@ fitdist(x, "nbinom") |> plot()
 
 save data for other languages
 
-
 ```{r}
 cat(x, sep = "\n", file = "nb_sim.txt")
 ```
 
 Small note regarding the `vcd` package. It gives correct answers but in a slightly different way.
 
-1. `goodfit` function returns a list with `fitted` (expected) frequencies under a given distribution using `pdf` of this distribution
-2. `summary(goodfit object)` returns a $\chi^2$ and $G^2$ tests using `cdf` of a given distribution. 3. Pearson residuals are calculated as 
+1.  `goodfit` function returns a list with `fitted` (expected) frequencies under a given distribution using `pdf` of this distribution
+2.  `summary(goodfit object)` returns a $\chi^2$ and $G^2$ tests using `cdf` of a given distribution. 3. Pearson residuals are calculated as
 
 $$
 \widehat{\text{resid}}_{k,\text{Pearson}} = \frac{n_k - \hat{n}_k}{\sqrt{\hat{n}_k}}
 $$
 
-Thus, if we use `object$fitted` created by `goodfit` to calculate $\chi^2$ and $G^2$ statistics by hand we will get slightly different statistics values than the one returned by `summary.goodfit()` function. Thus, both are accepted results. 
+Thus, if we use `object$fitted` created by `goodfit` to calculate $\chi^2$ and $G^2$ statistics by hand we will get slightly different statistics values than the one returned by `summary.goodfit()` function. Thus, both are accepted results.
 
 In this material, we use the first approach in Python and Julia.
 
@@ -130,6 +127,7 @@ gof_nb
 summary(gof_nb)
 summary(gof_po)
 ```
+
 ```{r}
 rootogram(gof_nb, main = "Negative binomial")
 rootogram(gof_po, main = "Poisson")
@@ -137,7 +135,7 @@ rootogram(gof_po, main = "Poisson")
 
 ## Python
 
-Python uses a different specification of negative binomial than we specified in R so we need to rewrite it as follows: 
+Python uses a different specification of negative binomial than we specified in R so we need to rewrite it as follows:
 
 $$
 p = \frac{\text{size}}{\text{size} + \mu}.
@@ -197,10 +195,7 @@ st.power_divergence(x_uniq_counts,
                     lambda_ = 1, ddof = 2)
 ```
 
-
 **Rootograms** are not available in python. There are some scripts that recreate this plot using `matplotlib`, see https://stackoverflow.com/questions/38252879/how-to-plot-a-hanging-rootogram-in-python
-
-
 
 ## Julia
 
@@ -229,7 +224,6 @@ res = optimize(par -> llnb(par, x), [2, 0.5])
 res.minimizer
 ```
 
-
 Goodness of fit statistics
 
 ```{julia}
@@ -247,7 +241,7 @@ $G^2$ test
 PowerDivergenceTest(x_uniq_counts, lambda = 0.0, theta0 = est_pdf) 
 ```
 
-```julia
+``` julia
 Multinomial Likelihood Ratio Test
 ---------------------------------
 Population details:
@@ -266,7 +260,6 @@ Details:
     degrees of freedom: 18
     residuals:          [-0.216012, 0.200997, -0.138238, -0.0112519, 1.09536, -0.724547, -0.0209416, -0.487213, -1.08818, 0.904765, -1.47332, 2.56064, 0.147156, -0.599932, -0.693168, -0.242094, 0.201031, 1.15008, 5.21144]
     std. residuals:     [-0.236076, 0.223635, -0.151902, -0.0121131, 1.15647, -0.75304, -0.02151, -0.496206, -1.10169, 0.91225, -1.48139, 2.56985, 0.147502, -0.600848, -0.693853, -0.242248, 0.201113, 1.15028, 5.21153]
-
 ```
 
 Correct p-value for the correct number of dof.
@@ -281,7 +274,7 @@ $\chi^2$ test
 PowerDivergenceTest(x_uniq_counts, lambda = 1.0, theta0 = est_pdf)
 ```
 
-```julia
+``` julia
 Pearson's Chi-square Test
 -------------------------
 Population details:
@@ -302,19 +295,16 @@ Details:
     std. residuals:     [-0.236076, 0.223635, -0.151902, -0.0121131, 1.15647, -0.75304, -0.02151, -0.496206, -1.10169, 0.91225, -1.48139, 2.56985, 0.147502, -0.600848, -0.693853, -0.242248, 0.201113, 1.15028, 5.21153]
 ```
 
-Note that p-value is calculated wrongly as correct df is 18 not 20. So correct p-value is: 
+Note that p-value is calculated wrongly as correct df is 18 not 20. So correct p-value is:
 
 ```{julia}
 1-cdf(Chisq(19), 42.242072813765624)
 ```
-
 :::
-
 
 ## Example from the lecture
 
 ::: panel-tabset
-
 ## R
 
 Vector with data from the lecture
@@ -325,47 +315,50 @@ X_tab <- table(X)
 X_tab
 ```
 
-Check if Poisson distribution fits the data 
+Check if Poisson distribution fits the data
 
 ```{r}
 X_po <- goodfit(X, "poisson")
 X_po
 ```
+
 Step by step:
 
-1. estimate $\lambda$.
+1.  estimate $\lambda$.
 
 ```{r}
 lambda_hat <- mean(X)
 lambda_hat
 ```
 
-2. get expected values
+2.  get expected values
 
 ```{r}
 n_hat <- length(X)*dpois(0:4, lambda_hat)
 n_hat
 ```
 
-3. get pearson residual
+3.  get pearson residual
 
 ```{r}
 r_hat <- (as.vector(X_tab)-n_hat)/sqrt(n_hat)
 r_hat
 ```
 
-4. Save the result into a table
+4.  Save the result into a table
 
 ```{r}
 X_dt <- data.frame(X = 0:4, n = as.vector(X_tab), n_hat = n_hat, r_hat = r_hat)
 X_dt
 ```
+
 Check if negative binomial distribution fits the data better.
 
 ```{r}
 X_nb <- goodfit(X, "nbinom")
 X_nb
 ```
+
 Let's now look at $G^2$ test. Results indicate that Poisson and negative binomial distribution fit the data equally well.
 
 ```{r}
@@ -374,7 +367,6 @@ summary(X_nb)
 ```
 
 Now, let's see what AIC, BIC and LR test will say.
-
 
 ```{r}
 X_fit_ll_po <- fitdistr(X, "poisson")
@@ -392,6 +384,7 @@ The lower the better -- Poisson seems to be a better distribution. Note that in 
 ```{r}
 BIC(X_fit_ll_po, X_fit_ll_nb)
 ```
+
 Now, let's see what LR test will tell. For this example it seems that two distributions equally well fit the data.
 
 ```{r}
@@ -399,7 +392,8 @@ LR_test <- 2*X_fit_ll_nb$loglik - 2*X_fit_ll_po$loglik
 LR_test_p <- pchisq(LR_test, 1, lower.tail = F)
 data.frame(LR=LR_test, df = 1, p_val = LR_test_p)
 ```
-**Conclusion**: based only on the data we cannot indicate which distribution fit the data better. 
+
+**Conclusion**: based only on the data we cannot indicate which distribution fit the data better.
 
 ## Python
 
@@ -420,6 +414,7 @@ r_hat = (X_tab.values - n_hat) / np.sqrt(n_hat)
 X_dt = pd.DataFrame({'X': np.arange(0, 5), 'n': X_tab.values, 'n_hat': n_hat, 'r_hat': r_hat})
 X_dt
 ```
+
 ```{python}
 ## loglik for n
 def pdf_nbinom(par, x):
@@ -452,6 +447,4 @@ n_hat = length(X) * pdf.(Poisson(lambda_hat), 0:4);
 r_hat = (values(X_tab) .- n_hat) ./ sqrt.(n_hat);
 X_dt = DataFrame(X = 0:4, n = values(X_tab).*1, n_hat = n_hat, r_hat = r_hat)
 ```
-
-
 :::
