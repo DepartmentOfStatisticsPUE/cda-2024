@@ -119,6 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>res_ml <span class="ot">&lt;-</span> <span class="fu">goodfit</span>(X, <span class="st">"poisson"</span>, <span class="at">method =</span> <span class="st">"ML"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>res_x2 <span class="ot">&lt;-</span> <span class="fu">goodfit</span>(X, <span class="st">"poisson"</span>, <span class="at">method =</span> <span class="st">"MinChisq"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Note that <span class="math inline">\(\hat{\lambda}\)</span> is estimated differently so we get: 0.5789474 for the <code>ML</code> and 0.5910169 for the <code>MinChisq</code> method.</p>
 <p>The first object returns <span class="math inline">\(G^2\)</span> statistics and tests instead of <span class="math inline">\(\chi^2\)</span> statistics and tests.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res_ml)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

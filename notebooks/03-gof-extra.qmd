@@ -25,6 +25,8 @@ res_ml <- goodfit(X, "poisson", method = "ML")
 res_x2 <- goodfit(X, "poisson", method = "MinChisq")
 ```
 
+Note that $\hat{\lambda}$ is estimated differently so we get: `r res_ml$par` for the `ML` and `r res_x2$par` for the `MinChisq` method. 
+
 The first object returns $G^2$ statistics and tests instead of $\chi^2$ statistics and tests.
 
 ```{r}
